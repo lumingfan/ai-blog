@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 
 **/.DS_Store
+**/logs/*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
