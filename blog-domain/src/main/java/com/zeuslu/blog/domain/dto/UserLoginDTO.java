@@ -4,6 +4,7 @@ import com.zeuslu.blog.domain.constant.DtoParamConstant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 /**
  * 用户登录数据传输对象
@@ -11,6 +12,7 @@ import jakarta.validation.constraints.Size;
  * @author lumingfan
  */
 @Schema(description = "用户登录数据传输对象")
+@Data
 public class UserLoginDTO {
     /**
      * 用户账号名

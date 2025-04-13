@@ -5,7 +5,8 @@ package com.zeuslu.blog.common.errorcode;
  */
 public enum UserErrorCode implements IErrorCode {
     BAD_REPEATED_PASSWORD(60000, "密码不一致"),
-    USER_EXISTED(60001, "用户已存在");
+    USER_EXISTED(60001, "用户已存在"),
+    BAD_USER_PASSWORD(60003, "用户名或密码错误");
 
     private final int code;
     private final String message;

@@ -1,6 +1,7 @@
 package com.zeuslu.blog.user.service.impl;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
@@ -61,7 +62,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public SaTokenInfo login(UserLoginDTO loginDTO) {
-        return null;
+        // 1. 参数接收和验证格式(validation已经完成)
+        // 2. 用户存在性校验
+        String username = loginDTO.getUsername();
+        String password = loginDTO.getPassword();
+        User user = this.lambdaQuery().eq(User::getUsername, username).one();
+        if (user == null) {
+            throw new CommonException(UserErrorCode.BAD_USER_PASSWORD);
+        }
+        // 3. 密码验证
+        if (!BCrypt.checkpw(password, user.getPassword())) {
+            throw new CommonException(UserErrorCode.BAD_USER_PASSWORD);
+        }
+        // 4. 生成登录凭证并返回
+        StpUtil.login(user.getId());
+        return StpUtil.getTokenInfo();
     }
 }
 
