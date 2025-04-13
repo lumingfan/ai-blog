@@ -28,7 +28,7 @@ public class Base {
     /**
      * 删除标识 0：未删除 1：已删除
      */
-    @TableField(fill=FieldFill.INSERT)
+    @TableField(value="is_deleted", fill=FieldFill.INSERT)
     @TableLogic
     private Integer deleted;
 }

@@ -1,12 +1,9 @@
 package com.zeuslu.blog.common.errorcode;
 
-import lombok.Getter;
-
 /**
  *
  * @author zeusl
  */
-@Getter
 public enum BaseErrorCode implements IErrorCode {
 
     BAD_REQUEST(40000, "请求失败"),

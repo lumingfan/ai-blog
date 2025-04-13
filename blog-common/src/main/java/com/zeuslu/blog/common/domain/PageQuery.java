@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import static com.zeuslu.blog.common.constant.TableColumnConstant.CREATE_TIME;
+import static com.zeuslu.blog.common.constant.TableFieldConstant.CREATE_TIME;
 
 
 /**

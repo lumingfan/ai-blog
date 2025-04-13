@@ -1,6 +1,7 @@
 package com.zeuslu.blog.user.controller;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
+import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @author lumingfan
  */
 @Tag(name = "用户管理接口")
-@RestController("/user")
+@RestController
+@RequestMapping("/user")
 @RequiredArgsConstructor
 @Validated
+@Log
 public class UserController {
     private final UserService userService;
 

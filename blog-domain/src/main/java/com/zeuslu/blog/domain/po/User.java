@@ -2,8 +2,7 @@ package com.zeuslu.blog.domain.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 /**
  * 用户管理表
@@ -13,6 +12,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value ="tb_user")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends Base {
     /**
      * 主键ID

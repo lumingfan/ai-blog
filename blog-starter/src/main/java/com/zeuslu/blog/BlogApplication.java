@@ -8,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author lumingfan
  */
 @SpringBootApplication
-@MapperScan("com.zeuslu.blog")
+@MapperScan({
+        "com.zeuslu.blog.user.mapper",
+})
 public class BlogApplication {
     public static void main(String[] args) {
         SpringApplication.run(BlogApplication.class, args);

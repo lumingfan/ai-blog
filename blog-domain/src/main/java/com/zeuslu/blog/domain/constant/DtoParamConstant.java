@@ -15,7 +15,7 @@ public class DtoParamConstant {
     /**
      * 手机号格式
      */
-    public static final String PHONE_REGEX_PATTERN = "^1[3|5|7|8|9]\\d{9}$";
+    public static final String PHONE_REGEX_PATTERN = "^(?:(?:\\+|00)86)?1(?:(3[\\d])|(4[5-79])|(5[0-35-9])|(6[5-7])|(7[0-8])|(8[\\d])|(9[189]))\\d{8}$";
 
 
     /**

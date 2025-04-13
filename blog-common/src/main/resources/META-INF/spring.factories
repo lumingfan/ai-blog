@@ -1,3 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.zeuslu.blog.common.config.JsonConfig,\
-  com.zeuslu.blog.common.config.MybatisPlusConfig
+  com.zeuslu.blog.common.config.MybatisPlusConfig,\
+  com.zeuslu.blog.common.config.SaTokenConfigure,\
+  com.zeuslu.blog.common.config.AopConfig
+

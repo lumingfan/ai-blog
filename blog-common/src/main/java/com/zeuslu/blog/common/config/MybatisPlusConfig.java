@@ -1,7 +1,6 @@
 package com.zeuslu.blog.common.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.zeuslu.blog.common.handler.MetaDataFillHandler;
@@ -19,7 +18,7 @@ public class MybatisPlusConfig {
      */
     @Primary
     @Bean
-    public MetaObjectHandler metaObjectHandler() {
+    public MetaDataFillHandler metaObjectHandler() {
         return new MetaDataFillHandler();
     }
 
