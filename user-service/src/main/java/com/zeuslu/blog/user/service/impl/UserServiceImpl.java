@@ -81,6 +81,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         StpUtil.login(user.getId());
         return StpUtil.getTokenInfo();
     }
+
+    @Override
+    public void logout() {
+        StpUtil.logout();
+    }
 }
 
 

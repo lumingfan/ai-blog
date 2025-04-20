@@ -11,10 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户管理接口
@@ -31,9 +28,8 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册接口")
-    public Result<?> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
-        userService.register(userRegisterDTO);
-        return Result.ok();
+    public Result<SaTokenInfo> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+        return Result.ok(userService.register(userRegisterDTO));
     }
 
     @PostMapping("/login")
@@ -42,5 +38,11 @@ public class UserController {
         return Result.ok(userService.login(loginDTO));
     }
 
+    @GetMapping("/logout")
+    @Operation(summary = "用户登出接口")
+    public Result<Void> logout() {
+        userService.logout();
+        return Result.ok();
+    }
 
 }

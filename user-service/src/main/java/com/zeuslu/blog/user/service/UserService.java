@@ -16,4 +16,6 @@ public interface UserService extends IService<User> {
     SaTokenInfo register(UserRegisterDTO userRegisterDTO);
 
     SaTokenInfo login(UserLoginDTO loginDTO);
+
+    void logout();
 }
