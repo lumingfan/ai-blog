@@ -9,6 +9,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_id
+  configuration:
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
 logging:
   level:
     com.zeuslu.blog: debug

@@ -1,10 +1,13 @@
 package com.zeuslu.blog.common.handler;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import com.zeuslu.blog.common.constant.HttpStatus;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.common.errorcode.BaseErrorCode;
 import com.zeuslu.blog.common.exception.AbstractException;
 import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.WebUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,9 +24,16 @@ public class GlobalExceptionHandler {
         return Result.fail(ex);
     }
 
+    @ExceptionHandler(NotLoginException.class)
+    public void handleNotLoginException(NotLoginException ex, HttpServletResponse response) {
+        log.error("用户未登录 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
+        response.setStatus(HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(Exception.class)
     public Result<?> handleRuntimeException(Exception ex) {
         log.error("其他异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
         return Result.fail(new CommonException(BaseErrorCode.SYSTEM_ERROR));
     }
+
 }

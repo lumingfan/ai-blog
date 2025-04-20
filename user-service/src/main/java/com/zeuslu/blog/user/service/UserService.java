@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
 import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.domain.vo.UserVO;
 
 /**
 * @author lumingfan
@@ -18,4 +19,6 @@ public interface UserService extends IService<User> {
     SaTokenInfo login(UserLoginDTO loginDTO);
 
     void logout();
+
+    UserVO getCurrentUser();
 }

@@ -5,6 +5,7 @@ import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
+import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,11 +39,18 @@ public class UserController {
         return Result.ok(userService.login(loginDTO));
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @Operation(summary = "用户登出接口")
     public Result<Void> logout() {
         userService.logout();
         return Result.ok();
+    }
+
+
+    @GetMapping("/")
+    @Operation(summary = "获取当前用户信息接口")
+    public Result<UserVO> getCurrentUser() {
+        return Result.ok(userService.getCurrentUser());
     }
 
 }

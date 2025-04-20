@@ -2,6 +2,7 @@ package com.zeuslu.blog.domain.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zeuslu.blog.domain.enums.UserRoleEnums;
 import lombok.*;
 
 /**
@@ -46,4 +47,9 @@ public class User extends Base {
      * 用户邮箱
      */
     private String email;
+
+    /**
+     * 用户权限(0:游客; 1:普通用户; 2:管理员)
+     */
+    private UserRoleEnums role;
 }

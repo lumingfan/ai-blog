@@ -2,6 +2,7 @@ package com.zeuslu.blog.user.service.impl;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
@@ -11,6 +12,7 @@ import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
 import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.mapper.UserMapper;
 import com.zeuslu.blog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +87,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public void logout() {
         StpUtil.logout();
+    }
+
+    @Override
+    public UserVO getCurrentUser() {
+        // 1. 获取当前登录用户的id
+        Long userId = Long.parseLong(StpUtil.getLoginId().toString());
+        // 2. 查询用户信息并返回脱敏后的信息
+        User user = this.getById(userId);
+        return BeanUtil.copyProperties(user, UserVO.class);
     }
 }
 
