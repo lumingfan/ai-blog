@@ -13,7 +13,7 @@ import com.zeuslu.blog.domain.po.User;
 */
 public interface UserService extends IService<User> {
 
-    void register(UserRegisterDTO userRegisterDTO);
+    SaTokenInfo register(UserRegisterDTO userRegisterDTO);
 
     SaTokenInfo login(UserLoginDTO loginDTO);
 }

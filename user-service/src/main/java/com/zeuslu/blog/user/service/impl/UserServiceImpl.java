@@ -30,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public static final Integer DEFAULT_NICKNAME_SUFFIX_LEN = 10;
 
     @Override
-    public void register(UserRegisterDTO userRegisterDTO) {
+    public SaTokenInfo register(UserRegisterDTO userRegisterDTO) {
         // 1. 参数接收和验证(格式: controller + validation已经完成; 密码一致性)
         String username = userRegisterDTO.getUsername();
         String password = userRegisterDTO.getPassword();
@@ -49,15 +49,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String encrypt = BCrypt.hashpw(password, BCrypt.gensalt());
 
         // 4.创建用户账户
+        User user = User.builder()
+                .username(username)
+                .password(encrypt)
+                .nickname(DEFAULT_NICKNAME_PREFIX + RandomUtil.randomString(DEFAULT_NICKNAME_SUFFIX_LEN))
+                .build();
         try {
-            this.save(User.builder()
-                    .username(username)
-                    .password(encrypt)
-                    .nickname(DEFAULT_NICKNAME_PREFIX + RandomUtil.randomString(DEFAULT_NICKNAME_SUFFIX_LEN))
-                    .build());
+            this.save(user);
         } catch (DuplicateKeyException e) {
             throw new CommonException(UserErrorCode.USER_EXISTED);
         }
+        StpUtil.login(user.getId());
+        return StpUtil.getTokenInfo();
     }
 
     @Override
