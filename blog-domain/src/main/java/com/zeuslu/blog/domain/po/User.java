@@ -52,4 +52,9 @@ public class User extends Base {
      * 用户权限(0:游客; 1:普通用户; 2:管理员)
      */
     private UserRoleEnums role;
+
+    /**
+     * 用户头像
+     */
+    private String avatar;
 }

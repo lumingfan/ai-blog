@@ -1,10 +1,10 @@
 package com.zeuslu.blog.user.controller;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
+import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,13 +29,13 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册接口")
-    public Result<SaTokenInfo> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+    public Result<TokenVO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
         return Result.ok(userService.register(userRegisterDTO));
     }
 
     @PostMapping("/login")
     @Operation(summary = "用户登录接口")
-    public Result<SaTokenInfo> login(@Valid @RequestBody UserLoginDTO loginDTO) {
+    public Result<TokenVO> login(@Valid @RequestBody UserLoginDTO loginDTO) {
         return Result.ok(userService.login(loginDTO));
     }
 

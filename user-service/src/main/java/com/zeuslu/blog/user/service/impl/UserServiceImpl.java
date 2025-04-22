@@ -1,6 +1,5 @@
 package com.zeuslu.blog.user.service.impl;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -12,6 +11,7 @@ import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
 import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.mapper.UserMapper;
 import com.zeuslu.blog.user.service.UserService;
@@ -32,7 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public static final Integer DEFAULT_NICKNAME_SUFFIX_LEN = 10;
 
     @Override
-    public SaTokenInfo register(UserRegisterDTO userRegisterDTO) {
+    public TokenVO register(UserRegisterDTO userRegisterDTO) {
         // 1. 参数接收和验证(格式: controller + validation已经完成; 密码一致性)
         String username = userRegisterDTO.getUsername();
         String password = userRegisterDTO.getPassword();
@@ -57,16 +57,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .nickname(DEFAULT_NICKNAME_PREFIX + RandomUtil.randomString(DEFAULT_NICKNAME_SUFFIX_LEN))
                 .build();
         try {
-            this.save(user);
+            boolean saved = this.save(user);
+            if (!saved) {
+                throw new CommonException(UserErrorCode.REGISTER_FAILED);
+            }
+            // 获取字段默认值
+            user = this.getById(user.getId());
         } catch (DuplicateKeyException e) {
             throw new CommonException(UserErrorCode.USER_EXISTED);
         }
         StpUtil.login(user.getId());
-        return StpUtil.getTokenInfo();
+        return TokenVO.builder()
+                .token(StpUtil.getTokenInfo().tokenValue)
+                .userInfo(BeanUtil.copyProperties(user, UserVO.class)).build();
     }
 
     @Override
-    public SaTokenInfo login(UserLoginDTO loginDTO) {
+    public TokenVO login(UserLoginDTO loginDTO) {
         // 1. 参数接收和验证格式(validation已经完成)
         // 2. 用户存在性校验
         String username = loginDTO.getUsername();
@@ -81,7 +88,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 4. 生成登录凭证并返回
         StpUtil.login(user.getId());
-        return StpUtil.getTokenInfo();
+        return TokenVO.builder()
+                .token(StpUtil.getTokenInfo().tokenValue)
+                .userInfo(BeanUtil.copyProperties(user, UserVO.class)).build();
     }
 
     @Override

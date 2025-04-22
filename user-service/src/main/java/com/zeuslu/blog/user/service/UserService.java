@@ -1,10 +1,10 @@
 package com.zeuslu.blog.user.service;
 
-import cn.dev33.satoken.stp.SaTokenInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
 import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 
 /**
@@ -14,9 +14,9 @@ import com.zeuslu.blog.domain.vo.UserVO;
 */
 public interface UserService extends IService<User> {
 
-    SaTokenInfo register(UserRegisterDTO userRegisterDTO);
+    TokenVO register(UserRegisterDTO userRegisterDTO);
 
-    SaTokenInfo login(UserLoginDTO loginDTO);
+    TokenVO login(UserLoginDTO loginDTO);
 
     void logout();
 

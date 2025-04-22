@@ -52,4 +52,10 @@ public class UserVO {
      */
     @Schema(description = "用户权限", example = "NORMAL_USER")
     private UserRoleEnums role;
+
+    /**
+     * 用户头像
+     */
+    @Schema(description = "用户头像")
+    private String avatar;
 }
