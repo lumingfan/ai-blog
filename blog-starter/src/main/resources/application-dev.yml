@@ -11,3 +11,13 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+
+# minio配置
+storage:
+  minio:
+    endpoint: http://localhost:9000
+    access-key: 1ung6DUOusSwEsj07ynF
+    secret-key: j92V48ZjwChJgqsovlxndqottxDKQGNO6vKOdNCc
+    bucket-name: blog
+    base-url: http://localhost:9000/blog
+

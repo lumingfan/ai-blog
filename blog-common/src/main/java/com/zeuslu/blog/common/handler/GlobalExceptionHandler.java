@@ -13,6 +13,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Objects;
+
 /**
  * @author lumingfan
  */
@@ -40,6 +42,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         log.error("参数校验异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
-        return Result.fail(new CommonException(BaseErrorCode.PARAMS_ERROR));
+        return Result.fail(new CommonException(BaseErrorCode.PARAMS_ERROR.code(), Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage()));
     }
 }

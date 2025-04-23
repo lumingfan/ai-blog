@@ -11,12 +11,15 @@ public class CommonException extends AbstractException {
     public CommonException(IErrorCode code) {
         super(code);
     }
+    public CommonException(Integer code, String message) {
+        super(code, message);
+    }
 
     @Override
     public String toString() {
         return "CommonException: {" +
-                "code='" + errorCode.code() + "', " +
-                "message='" + errorCode.message() + "'" +
+                "code='" + getCode() + "', " +
+                "message='" + getMessage() + "'" +
                 '}';
     }
 

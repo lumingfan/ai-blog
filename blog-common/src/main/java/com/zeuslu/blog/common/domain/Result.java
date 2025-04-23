@@ -2,7 +2,6 @@ package com.zeuslu.blog.common.domain;
 
 
 import com.zeuslu.blog.common.constant.HttpStatus;
-import com.zeuslu.blog.common.errorcode.IErrorCode;
 import com.zeuslu.blog.common.exception.AbstractException;
 import lombok.Data;
 
@@ -51,7 +50,7 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> fail(AbstractException ex) {
-        return build(null, ex.code(), ex.message());
+        return build(null, ex.getCode(), ex.getMessage());
     }
 
     public static <T> Result<T> fail(T data, String msg) {

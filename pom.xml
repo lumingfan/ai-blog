@@ -12,6 +12,7 @@
         <module>blog-common</module>
         <module>blog-domain</module>
         <module>blog-starter</module>
+        <module>storage-service</module>
     </modules>
     <version>1.0.0</version>
 
@@ -34,6 +35,9 @@
         <druid.version>1.2.12</druid.version>
         <fastjson2.version>2.0.57</fastjson2.version>
         <sa-token.version>1.42.0</sa-token.version>
+        <cos.version>5.6.227</cos.version>
+        <minio.version>8.5.17</minio.version>
+
     </properties>
 
     <!-- 对依赖包进行管理 -->
@@ -92,6 +96,21 @@
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
+
+            <!-- 腾讯云存储 -->
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${cos.version}</version>
+            </dependency>
+
+            <!-- minio -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

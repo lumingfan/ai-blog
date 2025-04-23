@@ -3,9 +3,11 @@ package com.zeuslu.blog.user.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
+import com.zeuslu.blog.domain.dto.UserUpdateDTO;
 import com.zeuslu.blog.domain.po.User;
 import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
+import jakarta.validation.Valid;
 
 /**
 * @author lumingfan
@@ -21,4 +23,6 @@ public interface UserService extends IService<User> {
     void logout();
 
     UserVO getCurrentUser();
+
+    UserVO updateUserInfo(@Valid UserUpdateDTO userUpdateDTO);
 }

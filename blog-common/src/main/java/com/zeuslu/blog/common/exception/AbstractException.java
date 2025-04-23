@@ -7,16 +7,16 @@ import lombok.Getter;
 /**
  * @author lumingfan
  */
+@Getter
 public abstract class AbstractException extends RuntimeException {
-    protected IErrorCode errorCode;
+    protected int code;
+    protected String message;
     public AbstractException(IErrorCode errorCode) {
-        this.errorCode = errorCode;
+        this.code = errorCode.code();
+        this.message = errorCode.message();
     }
-
-    public int code() {
-        return errorCode.code();
-    }
-    public String message() {
-        return errorCode.message();
+    public AbstractException(int code, String message) {
+        this.code = code;
+        this.message = message;
     }
 }

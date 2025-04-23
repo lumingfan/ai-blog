@@ -1,9 +1,11 @@
 package com.zeuslu.blog.user.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
+import com.zeuslu.blog.domain.dto.UserUpdateDTO;
 import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.service.UserService;
@@ -13,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户管理接口
@@ -46,11 +49,24 @@ public class UserController {
         return Result.ok();
     }
 
-
-    @GetMapping("/")
+    @GetMapping
     @Operation(summary = "获取当前用户信息接口")
     public Result<UserVO> getCurrentUser() {
         return Result.ok(userService.getCurrentUser());
+    }
+
+    @PutMapping
+    @Operation(summary = "更新用户信息")
+    public Result<UserVO> updateUserInfo(
+            @RequestPart(value = "avatar", required = false) MultipartFile avatar,
+            @RequestPart(value = "userInfo", required = false) @Valid UserUpdateDTO userUpdateDTO) {
+        // 如果没有传递userUpdateDTO和avatar则直接返回
+        if (avatar == null && (userUpdateDTO == null || BeanUtil.isEmpty(userUpdateDTO))) {
+            return Result.ok(userService.getCurrentUser());
+        }
+        // 设置头像
+        userUpdateDTO.setAvatar(avatar);
+        return Result.ok(userService.updateUserInfo(userUpdateDTO));
     }
 
 }

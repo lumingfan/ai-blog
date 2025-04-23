@@ -10,9 +10,12 @@ import com.zeuslu.blog.common.errorcode.UserErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
+import com.zeuslu.blog.domain.dto.UserUpdateDTO;
 import com.zeuslu.blog.domain.po.User;
 import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
+import com.zeuslu.blog.storage.factory.StorageFactory;
+import com.zeuslu.blog.storage.util.StorageStrategy;
 import com.zeuslu.blog.user.mapper.UserMapper;
 import com.zeuslu.blog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     public static final String DEFAULT_NICKNAME_PREFIX = "user:";
     public static final Integer DEFAULT_NICKNAME_SUFFIX_LEN = 10;
+    private final StorageFactory storageFactory;
+
+    private final String AVATAR_DIR_PREFIX = "avatar";
+
 
     @Override
     public TokenVO register(UserRegisterDTO userRegisterDTO) {
@@ -105,6 +112,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 2. 查询用户信息并返回脱敏后的信息
         User user = this.getById(userId);
         return BeanUtil.copyProperties(user, UserVO.class);
+    }
+
+    @Override
+    public UserVO updateUserInfo(UserUpdateDTO userUpdateDTO) {
+        // 1. 上传用户头像
+        String avatar = null;
+        if (userUpdateDTO.getAvatar() != null) {
+            StorageStrategy storageService = storageFactory.getStorageService();
+            avatar = storageService.uploadFile(userUpdateDTO.getAvatar(), AVATAR_DIR_PREFIX);
+
+        }
+        Long id = Long.parseLong(StpUtil.getLoginId().toString());
+        this.lambdaUpdate().eq(User::getId, id)
+                .set(avatar != null, User::getAvatar, avatar)
+                .set(userUpdateDTO.getNickname() != null, User::getNickname, userUpdateDTO.getNickname())
+                .set(userUpdateDTO.getEmail() != null, User::getEmail, userUpdateDTO.getEmail())
+                .set(userUpdateDTO.getPhone() != null, User::getPhone, userUpdateDTO.getPhone())
+                .update();
+        return BeanUtil.copyProperties(this.getById(id), UserVO.class);
     }
 }
 
