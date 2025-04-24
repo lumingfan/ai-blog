@@ -55,6 +55,13 @@ public class UserController {
         return Result.ok(userService.getCurrentUser());
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "根据用户id获取用户信息")
+    public Result<UserVO> getUserById(@PathVariable Long id) {
+        return Result.ok(userService.getUserById(id));
+    }
+
+
     @PutMapping
     @Operation(summary = "更新用户信息")
     public Result<UserVO> updateUserInfo(
@@ -68,5 +75,4 @@ public class UserController {
         userUpdateDTO.setAvatar(avatar);
         return Result.ok(userService.updateUserInfo(userUpdateDTO));
     }
-
 }

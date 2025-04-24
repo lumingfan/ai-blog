@@ -132,6 +132,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 .update();
         return BeanUtil.copyProperties(this.getById(id), UserVO.class);
     }
+
+    @Override
+    public UserVO getUserById(Long id) {
+        return BeanUtil.copyProperties(this.getById(id), UserVO.class);
+    }
 }
 
 
