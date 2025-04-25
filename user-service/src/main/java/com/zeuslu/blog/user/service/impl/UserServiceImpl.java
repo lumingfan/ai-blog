@@ -2,12 +2,14 @@ package com.zeuslu.blog.user.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zeuslu.blog.common.errorcode.UserErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
+import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.domain.dto.UserLoginDTO;
 import com.zeuslu.blog.domain.dto.UserRegisterDTO;
 import com.zeuslu.blog.domain.dto.UserUpdateDTO;
@@ -36,6 +38,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private final StorageFactory storageFactory;
 
     private final String AVATAR_DIR_PREFIX = "avatar";
+    private final String AVATAR_FIELD = "avatar";
+    private final String DEFAULT_AVATAR_URL = "https://aiblog-1305314451.cos.ap-shanghai.myqcloud.com/avatar%2Fdefault_avatar.svg";
 
 
     @Override
@@ -116,21 +120,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public UserVO updateUserInfo(UserUpdateDTO userUpdateDTO) {
-        // 1. 上传用户头像
-        String avatar = null;
+        // 1.查询用户信息
+        User user = this.getById(SaTokenUtil.getId());
+        // 2.上传用户头像, 并删除原来的用户头像减轻minio存储压力
         if (userUpdateDTO.getAvatar() != null) {
             StorageStrategy storageService = storageFactory.getStorageService();
-            avatar = storageService.uploadFile(userUpdateDTO.getAvatar(), AVATAR_DIR_PREFIX);
-
+            // 不是默认头像, 直接删除
+            if (user.getAvatar() != null && !user.getAvatar().equals(DEFAULT_AVATAR_URL)) {
+                storageService.deleteFile(user.getAvatar());
+            }
+            // 更新头像
+            user.setAvatar(storageService.uploadFile(userUpdateDTO.getAvatar(), AVATAR_DIR_PREFIX));
         }
-        Long id = Long.parseLong(StpUtil.getLoginId().toString());
-        this.lambdaUpdate().eq(User::getId, id)
-                .set(avatar != null, User::getAvatar, avatar)
-                .set(userUpdateDTO.getNickname() != null, User::getNickname, userUpdateDTO.getNickname())
-                .set(userUpdateDTO.getEmail() != null, User::getEmail, userUpdateDTO.getEmail())
-                .set(userUpdateDTO.getPhone() != null, User::getPhone, userUpdateDTO.getPhone())
-                .update();
-        return BeanUtil.copyProperties(this.getById(id), UserVO.class);
+        // 更新其他信息
+        BeanUtil.copyProperties(userUpdateDTO, user,
+                CopyOptions.create()
+                        .setIgnoreNullValue(true)
+                        .setIgnoreProperties(AVATAR_FIELD)
+        );
+        // 3.更新用户信息
+        if (!this.updateById(user)) {
+            throw new CommonException(UserErrorCode.UPDATE_FAILED);
+        }
+        return BeanUtil.copyProperties(user, UserVO.class);
     }
 
     @Override

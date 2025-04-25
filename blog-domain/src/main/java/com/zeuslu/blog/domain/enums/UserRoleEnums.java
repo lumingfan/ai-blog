@@ -13,8 +13,8 @@ public enum UserRoleEnums {
     USER(1, "用户"),
     ADMIN(2, "管理员");
     @EnumValue
-    private final int role;
     @JsonValue
+    private final int role;
     private final String desc;
 
     UserRoleEnums(int role, String desc) {

@@ -15,7 +15,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户管理接口
@@ -65,14 +64,11 @@ public class UserController {
     @PutMapping
     @Operation(summary = "更新用户信息")
     public Result<UserVO> updateUserInfo(
-            @RequestPart(value = "avatar", required = false) MultipartFile avatar,
-            @RequestPart(value = "userInfo", required = false) @Valid UserUpdateDTO userUpdateDTO) {
-        // 如果没有传递userUpdateDTO和avatar则直接返回
-        if (avatar == null && (userUpdateDTO == null || BeanUtil.isEmpty(userUpdateDTO))) {
+            @ModelAttribute @Valid UserUpdateDTO userUpdateDTO) {
+        // 没有传递用户更新信息
+        if (BeanUtil.isEmpty(userUpdateDTO)) {
             return Result.ok(userService.getCurrentUser());
         }
-        // 设置头像
-        userUpdateDTO.setAvatar(avatar);
         return Result.ok(userService.updateUserInfo(userUpdateDTO));
     }
 }
