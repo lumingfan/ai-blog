@@ -5,29 +5,29 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import static com.zeuslu.blog.common.constant.TableFieldConstant.CREATE_TIME;
+import static com.zeuslu.blog.common.constant.TableFieldConstant.CREATE_TIME_UNDERLINE;
 
 
 /**
  * @author lumingfan
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "分页查询条件")
 @Accessors(chain = true)
 public class PageQuery {
-    public static final Integer DEFAULT_PAGE_SIZE = 20;
-    public static final Integer DEFAULT_PAGE_NUM = 1;
-
-
     @Schema(description = "页码")
     @Min(value = 1, message = "页码不能小于1")
-    private Integer pageNo = DEFAULT_PAGE_NUM;
+    private Integer pageNo;
     @Schema(description = "页码")
     @Min(value = 1, message = "每页查询数量不能小于1")
-    private Integer pageSize = DEFAULT_PAGE_SIZE;
+    private Integer pageSize;
     @Schema(description = "是否升序")
     private Boolean isAsc = true;
     @Schema(description = "排序方式")
@@ -75,6 +75,6 @@ public class PageQuery {
      * @return MybatisPlus的Page类
      */
     public <T> Page<T> toPage() {
-        return toMpPage(CREATE_TIME, false);
+        return toMpPage(CREATE_TIME_UNDERLINE, false);
     }
 }

@@ -1,20 +1,17 @@
 package com.zeuslu.blog.user.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.dto.UserLoginDTO;
-import com.zeuslu.blog.domain.dto.UserRegisterDTO;
-import com.zeuslu.blog.domain.dto.UserUpdateDTO;
-import com.zeuslu.blog.domain.vo.TokenVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户管理接口
@@ -29,24 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/register")
-    @Operation(summary = "用户注册接口")
-    public Result<TokenVO> register(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
-        return Result.ok(userService.register(userRegisterDTO));
-    }
 
-    @PostMapping("/login")
-    @Operation(summary = "用户登录接口")
-    public Result<TokenVO> login(@Valid @RequestBody UserLoginDTO loginDTO) {
-        return Result.ok(userService.login(loginDTO));
-    }
-
-    @PostMapping("/logout")
-    @Operation(summary = "用户登出接口")
-    public Result<Void> logout() {
-        userService.logout();
-        return Result.ok();
-    }
 
     @GetMapping
     @Operation(summary = "获取当前用户信息接口")
@@ -58,17 +38,5 @@ public class UserController {
     @Operation(summary = "根据用户id获取用户信息")
     public Result<UserVO> getUserById(@PathVariable Long id) {
         return Result.ok(userService.getUserById(id));
-    }
-
-
-    @PutMapping
-    @Operation(summary = "更新用户信息")
-    public Result<UserVO> updateUserInfo(
-            @ModelAttribute @Valid UserUpdateDTO userUpdateDTO) {
-        // 没有传递用户更新信息
-        if (BeanUtil.isEmpty(userUpdateDTO)) {
-            return Result.ok(userService.getCurrentUser());
-        }
-        return Result.ok(userService.updateUserInfo(userUpdateDTO));
     }
 }

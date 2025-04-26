@@ -34,6 +34,17 @@ public class User extends Base {
     private String username;
 
     /**
+     * 用户个人简介
+     */
+    private String bio;
+
+    /**
+     * 用户头像URL
+     */
+    private String avatar;
+
+
+    /**
      * 用户密码
      */
     private String password;
@@ -49,12 +60,13 @@ public class User extends Base {
     private String email;
 
     /**
+     * 用户获赞总数
+     */
+    private Integer totalLikes;
+
+    /**
      * 用户权限(0:游客; 1:普通用户; 2:管理员)
      */
     private UserRoleEnums role;
 
-    /**
-     * 用户头像
-     */
-    private String avatar;
 }

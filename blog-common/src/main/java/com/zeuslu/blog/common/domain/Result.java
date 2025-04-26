@@ -24,48 +24,50 @@ public class Result<T> implements Serializable {
     private int code;
     private String msg;
     private T data;
+    private Boolean success;
 
     public static <T> Result<T> ok() {
-        return build(null, SUCCESS, SUCCESS_MSG);
+        return build(null, SUCCESS, SUCCESS_MSG, true);
     }
 
     public static <T> Result<T> ok(T data) {
-        return build(data, SUCCESS, SUCCESS_MSG);
+        return build(data, SUCCESS, SUCCESS_MSG, true);
     }
 
     public static <T> Result<T> ok(T data, String msg) {
-        return build(data, SUCCESS, msg);
+        return build(data, SUCCESS, msg, true);
     }
 
     public static <T> Result<T> fail() {
-        return build(null, FAIL, FAIL_MSG);
+        return build(null, FAIL, FAIL_MSG, false);
     }
 
     public static <T> Result<T> fail(String msg) {
-        return build(null, FAIL, msg);
+        return build(null, FAIL, msg, false);
     }
 
     public static <T> Result<T> fail(T data) {
-        return build(data, FAIL, FAIL_MSG);
+        return build(data, FAIL, FAIL_MSG, false);
     }
 
     public static <T> Result<T> fail(AbstractException ex) {
-        return build(null, ex.getCode(), ex.getMessage());
+        return build(null, ex.getCode(), ex.getMessage(), false);
     }
 
     public static <T> Result<T> fail(T data, String msg) {
-        return build(data, FAIL, msg);
+        return build(data, FAIL, msg, false);
     }
 
     public static <T> Result<T> fail(int code, String msg) {
-        return build(null, code, msg);
+        return build(null, code, msg, false);
     }
 
-    private static <T> Result<T> build(T data, int code, String msg) {
+    private static <T> Result<T> build(T data, int code, String msg, boolean success) {
         Result<T> result = new Result<>();
         result.setCode(code);
         result.setData(data);
         result.setMsg(msg);
+        result.setSuccess(success);
         return result;
     }
 }

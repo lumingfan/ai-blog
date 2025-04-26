@@ -1,21 +1,16 @@
 package com.zeuslu.blog.common.domain;
 
 
-
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.convert.Convert;
-import cn.hutool.core.convert.Converter;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author lumingfan
@@ -26,7 +21,7 @@ import java.util.stream.Collectors;
 public class PageResult<T> {
     protected Long total;
     protected Long pages;
-    protected List<T> list;
+    protected List<T> contents;
 
     public static <T> PageResult<T> empty(Long total, Long pages) {
         return new PageResult<>(total, pages, Collections.emptyList());
@@ -45,11 +40,24 @@ public class PageResult<T> {
         return new PageResult<>(page.getTotal(), page.getPages(), page.getRecords());
     }
 
+    /**
+     * 给定结果的list, 将Page<T>转换为PageResult<T>
+     */
     public static <T> PageResult<T> of(Page<?> page, List<T> list) {
         return new PageResult<>(page.getTotal(), page.getPages(), list);
     }
-
+    /**
+     * 给定结果类型, 将Page<R>转换为PageResult<T>
+     */
     public static <T, R> PageResult<T> of(Page<R> page, Class<T> clazz) {
         return new PageResult<>(page.getTotal(), page.getPages(), BeanUtil.copyToList(page.getRecords(), clazz));
+    }
+
+
+    /**
+     * 自定义转换函数, 将Page<R>转换为PageResult<T>
+     */
+    public static <T, R> PageResult<T> of(Page<R> page, Function<R, T> function) {
+        return new PageResult<>(page.getTotal(), page.getPages(), page.getRecords().stream().map(function).toList());
     }
 }

@@ -1,13 +1,12 @@
 package com.zeuslu.blog.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zeuslu.blog.domain.dto.UserLoginDTO;
-import com.zeuslu.blog.domain.dto.UserRegisterDTO;
-import com.zeuslu.blog.domain.dto.UserUpdateDTO;
+import com.zeuslu.blog.domain.dto.LoginDTO;
+import com.zeuslu.blog.domain.dto.RegisterDTO;
 import com.zeuslu.blog.domain.po.User;
-import com.zeuslu.blog.domain.vo.TokenVO;
+import com.zeuslu.blog.domain.vo.LoginResponseVO;
 import com.zeuslu.blog.domain.vo.UserVO;
-import jakarta.validation.Valid;
+import com.zeuslu.blog.domain.vo.UsernameCheckVO;
 
 /**
 * @author lumingfan
@@ -16,15 +15,17 @@ import jakarta.validation.Valid;
 */
 public interface UserService extends IService<User> {
 
-    TokenVO register(UserRegisterDTO userRegisterDTO);
+    void register(RegisterDTO registerDTO);
 
-    TokenVO login(UserLoginDTO loginDTO);
+    LoginResponseVO login(LoginDTO loginDTO);
 
     void logout();
 
     UserVO getCurrentUser();
 
-    UserVO updateUserInfo(@Valid UserUpdateDTO userUpdateDTO);
-
     UserVO getUserById(Long id);
+
+    UsernameCheckVO checkUsername(String username);
+
+    Boolean validateToken();
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Objects;
 
@@ -44,4 +45,11 @@ public class GlobalExceptionHandler {
         log.error("参数校验异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
         return Result.fail(new CommonException(BaseErrorCode.PARAMS_ERROR.code(), Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage()));
     }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletResponse response) {
+        response.setStatus(HttpStatus.NOT_FOUND);
+    }
+
+
 }

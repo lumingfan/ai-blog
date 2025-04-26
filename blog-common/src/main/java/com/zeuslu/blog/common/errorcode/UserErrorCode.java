@@ -4,11 +4,12 @@ package com.zeuslu.blog.common.errorcode;
  * @author lumingfan
  */
 public enum UserErrorCode implements IErrorCode {
-    BAD_REPEATED_PASSWORD(60000, "密码不一致"),
-    USER_EXISTED(60001, "用户已存在"),
-    BAD_USER_PASSWORD(60003, "用户名或密码错误"),
-    REGISTER_FAILED(60004, "注册失败, 请稍后重试"),
-    UPDATE_FAILED(60005, "更新失败, 请稍后重试"),
+    REPEATED_PASSWORD_NON_CONSISTENT(50000, "重复密码不一致"),
+    USERNAME_OR_PASSWORD_ERROR(50001, "用户名或密码错误"),
+    USERNAME_EXISTED(50002, "用户已存在"),
+    UNSUPPORTED_LOGIN_TYPE(50003, "不支持的登录方式"),
+    TOO_MANY_REQUESTS(50029, "请求过于频繁"),
+    INTERNAL_SERVER_ERROR(50030, "服务繁忙, 请稍后重试"),
     ;
 
     private final int code;

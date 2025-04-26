@@ -18,6 +18,14 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>blog-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
         <!-- swagger文档-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -27,6 +35,11 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        <!--hutool工具包-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
 
 

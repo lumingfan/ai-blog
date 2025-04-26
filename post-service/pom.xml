@@ -9,7 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>blog-starter</artifactId>
+    <artifactId>post-service</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,14 +20,23 @@
     <dependencies>
         <dependency>
             <groupId>com.zeuslu.blog</groupId>
-            <artifactId>user-service</artifactId>
+            <artifactId>blog-common</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.zeuslu.blog</groupId>
-            <artifactId>post-service</artifactId>
+            <artifactId>blog-domain</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>storage-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>user-service</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>
-
 </project>

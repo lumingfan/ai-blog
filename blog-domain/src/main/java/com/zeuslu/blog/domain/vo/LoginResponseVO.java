@@ -7,24 +7,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 登录令牌视图对象
  * @author lumingfan
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "登录令牌视图对象")
-public class TokenVO {
-    /**
-     * 访问令牌
-     */
-    @Schema(description = "访问令牌")
+@Schema(description = "登录响应VO")
+public class LoginResponseVO {
+    @Schema(description = "JWT令牌")
     private String token;
-
-    /**
-     * 用户基本信息
-     */
-    @Schema(description = "用户基本信息")
-    private UserVO userInfo;
+    
+    @Schema(description = "用户信息")
+    private UserVO user;
 }

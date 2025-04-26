@@ -13,6 +13,7 @@
         <module>blog-domain</module>
         <module>blog-starter</module>
         <module>storage-service</module>
+        <module>post-service</module>
     </modules>
     <version>1.0.0</version>
 
