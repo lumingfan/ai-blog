@@ -2,6 +2,7 @@ package com.zeuslu.blog.user.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
@@ -12,6 +13,7 @@ import com.zeuslu.blog.domain.dto.LoginDTO;
 import com.zeuslu.blog.domain.dto.RegisterDTO;
 import com.zeuslu.blog.domain.po.User;
 import com.zeuslu.blog.domain.vo.LoginResponseVO;
+import com.zeuslu.blog.domain.vo.UserDetailVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.domain.vo.UsernameCheckVO;
 import com.zeuslu.blog.storage.factory.StorageFactory;
@@ -21,6 +23,9 @@ import com.zeuslu.blog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author lumingfan
@@ -105,8 +110,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserVO getUserById(Long id) {
-        return BeanUtil.copyProperties(this.getById(id), UserVO.class);
+    public UserDetailVO getUserById(Long id) {
+        // 1. 获取用户信息
+        User user = this.getById(id);
+        // 2. 用户不存在
+        if (user == null) {
+            throw new CommonException(UserErrorCode.USER_NOT_EXISTED);
+        }
+        // 3. TODO: 获取用户对应的文章数量, 粉丝数量, 关注数量, 标签, 当前用户是否已经关注该用户
+        return BeanUtil.copyProperties(this.getById(id), UserDetailVO.class);
     }
 
     @Override
@@ -123,6 +135,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public Boolean validateToken() {
         return StpUtil.isLogin();
+    }
+
+    @Override
+    public List<UserVO> getBatchByIds(List<Long> authorIds) {
+        if (CollUtil.isEmpty(authorIds)) {
+            return Collections.emptyList();
+        }
+        // TODO: 当authorIds过大时, 需要分批查询
+        return this.lambdaQuery().in(User::getId, authorIds).list().stream().map(
+                user -> BeanUtil.copyProperties(user, UserVO.class)
+        ).toList();
     }
 }
 

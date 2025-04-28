@@ -5,8 +5,11 @@ import com.zeuslu.blog.domain.dto.LoginDTO;
 import com.zeuslu.blog.domain.dto.RegisterDTO;
 import com.zeuslu.blog.domain.po.User;
 import com.zeuslu.blog.domain.vo.LoginResponseVO;
+import com.zeuslu.blog.domain.vo.UserDetailVO;
 import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.domain.vo.UsernameCheckVO;
+
+import java.util.List;
 
 /**
 * @author lumingfan
@@ -23,9 +26,11 @@ public interface UserService extends IService<User> {
 
     UserVO getCurrentUser();
 
-    UserVO getUserById(Long id);
+    UserDetailVO getUserById(Long id);
 
     UsernameCheckVO checkUsername(String username);
 
     Boolean validateToken();
+
+    List<UserVO> getBatchByIds(List<Long> authorIds);
 }
