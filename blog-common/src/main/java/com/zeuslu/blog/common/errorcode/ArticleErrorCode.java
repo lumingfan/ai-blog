@@ -3,13 +3,13 @@ package com.zeuslu.blog.common.errorcode;
 /**
  * @author lumingfan
  */
-public enum PostErrorCode implements IErrorCode {
-    PUBLISH_FAILED(70000, "帖子发布失败, 请稍后重试");
+public enum ArticleErrorCode implements IErrorCode {
+    PUBLISH_FAILED(70000, "文章发布失败, 请稍后重试");
 
     private final int code;
     private final String message;
 
-    PostErrorCode(int code, String message) {
+    ArticleErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
     }

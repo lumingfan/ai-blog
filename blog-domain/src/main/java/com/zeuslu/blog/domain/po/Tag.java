@@ -1,21 +1,18 @@
 package com.zeuslu.blog.domain.po;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
  * 标签表
  * @author lumingfan
  * @TableName tb_tag
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="tb_tag")
 @Data
-public class Tag extends Base {
+public class Tag {
     /**
      * 标签ID
      */
@@ -28,8 +25,7 @@ public class Tag extends Base {
     private String name;
 
     /**
-     * 帖子数量, 通过聚合函数计算
+     * 创建时间
      */
-    @TableField(exist = false)
-    private Integer count;
+    private Date createdAt;
 }

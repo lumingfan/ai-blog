@@ -10,7 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @MapperScan({
         "com.zeuslu.blog.user.mapper",
-        "com.zeuslu.blog.post.mapper"
+        "com.zeuslu.blog.article.mapper",
+        "com.zeuslu.blog.tag.mapper",
 })
 public class BlogApplication {
     public static void main(String[] args) {

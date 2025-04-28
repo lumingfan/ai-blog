@@ -4,17 +4,17 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 /**
  * 帖子分类表
  * @author lumingfan
  * @TableName tb_category
  */
-@EqualsAndHashCode(callSuper = true)
 @TableName(value ="tb_category")
 @Data
-public class Category extends Base {
+public class Category {
     /**
      * 主键id
      */
@@ -40,4 +40,9 @@ public class Category extends Base {
      * 帖子数量
      */
     private Integer count;
+
+    /**
+     * 分类创建时间
+     */
+    private LocalDateTime createdAt;
 }

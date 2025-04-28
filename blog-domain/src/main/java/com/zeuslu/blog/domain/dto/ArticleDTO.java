@@ -1,0 +1,30 @@
+package com.zeuslu.blog.domain.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.util.List;
+
+/**
+ * @author lumingfan
+ */
+@Data
+@Schema(description = "文章DTO")
+public class ArticleDTO {
+    @Schema(description = "文章ID")
+    private Long id;
+    @Schema(description = "文章标题")
+    private String title;
+    @Schema(description = "文章内容")
+    private String content;
+    @Schema(description = "文章摘要")
+    private String summary;
+    @Schema(description = "文章封面")
+    private String coverImage;
+    @Schema(description = "文章分类")
+    private Long categoryId;
+    @Schema(description = "文章标签")
+    private List<String> tags;
+    @Schema(description = "文章是否为草稿")
+    private Boolean draft;
+}

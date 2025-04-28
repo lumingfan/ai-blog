@@ -14,12 +14,8 @@ import java.time.LocalDateTime;
 
 @Slf4j
 public class MetaDataFillHandler implements MetaObjectHandler {
-
     @Override
     public void insertFill(MetaObject metaObject) {
-        strictInsertFill(metaObject, TableFieldConstant.CREATE_TIME, LocalDateTime::now, LocalDateTime.class);
-        strictInsertFill(metaObject, TableFieldConstant.UPDATE_TIME, LocalDateTime::now, LocalDateTime.class);
-        strictInsertFill(metaObject, TableFieldConstant.DELETED_FLAG, () -> 0, Integer.class);
     }
 
     @Override

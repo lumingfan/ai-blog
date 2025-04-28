@@ -16,19 +16,18 @@ public class Base {
     /**
      * 创建时间
      */
-    @TableField(fill= FieldFill.INSERT)
     private LocalDateTime createdAt;
 
     /**
      * 修改时间
      */
-    @TableField(fill=FieldFill.INSERT_UPDATE)
+    @TableField(fill=FieldFill.UPDATE)
     private LocalDateTime updatedAt;
 
     /**
      * 删除标识 0：未删除 1：已删除
      */
-    @TableField(value="is_deleted", fill=FieldFill.INSERT)
+    @TableField(value="is_deleted")
     @TableLogic
     private Integer deleted;
 }

@@ -21,7 +21,7 @@ import java.util.function.Function;
 public class PageResult<T> {
     protected Long total;
     protected Long pages;
-    protected List<T> contents;
+    protected List<T> items;
 
     public static <T> PageResult<T> empty(Long total, Long pages) {
         return new PageResult<>(total, pages, Collections.emptyList());
