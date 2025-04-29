@@ -1,7 +1,8 @@
 package com.zeuslu.blog.storage.util;
 
+import com.zeuslu.blog.domain.dto.FileUploadDTO;
+import com.zeuslu.blog.domain.vo.FileUploadResponseVO;
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lumingfan
@@ -9,11 +10,10 @@ import org.springframework.web.multipart.MultipartFile;
 public interface StorageStrategy {
     /**
      * 上传文件
-     * @param file 文件对象
-     * @param dirPrefix 目录前缀
-     * @return 文件访问URL
+     * @param fileUploadDTO 文件对象+元数据
+     * @return 文件访问URL+文件大小
      */
-    String uploadFile(MultipartFile file, String dirPrefix);
+    FileUploadResponseVO uploadFile(FileUploadDTO fileUploadDTO);
 
     /**
      * 删除文件

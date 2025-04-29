@@ -25,6 +25,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>blog-domain</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
         </dependency>

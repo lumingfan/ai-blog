@@ -1,6 +1,10 @@
 package com.zeuslu.blog.storage.util.impl;
 
 import cn.hutool.core.lang.UUID;
+import com.zeuslu.blog.common.errorcode.StorageErrorCode;
+import com.zeuslu.blog.common.exception.CommonException;
+import com.zeuslu.blog.domain.dto.FileUploadDTO;
+import com.zeuslu.blog.domain.vo.FileUploadResponseVO;
 import com.zeuslu.blog.storage.config.StorageConfig;
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
 import com.zeuslu.blog.storage.util.StorageStrategy;
@@ -29,9 +33,16 @@ public class MinioStrategy implements StorageStrategy {
     }
 
     @Override
-    public String uploadFile(MultipartFile file, String dirPrefix) {
+    public FileUploadResponseVO uploadFile(FileUploadDTO fileUploadDTO) {
+        MultipartFile file = fileUploadDTO.getFile();
         if (file == null || file.isEmpty()) {
             return null;
+        }
+        String type = fileUploadDTO.getType();
+        Long maxSize = fileUploadDTO.getMaxSize();
+
+        if (file.getSize() > maxSize) {
+            throw new CommonException(StorageErrorCode.FILE_SIZE_EXCEEDED);
         }
 
         try {
@@ -58,8 +69,8 @@ public class MinioStrategy implements StorageStrategy {
             }
             // 日期路径，例如：2023/04/
             String datePath = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/"));
-            // 文件名：dirPrefix/date/uuid.suffix
-            String objectName = dirPrefix + "/" + datePath + UUID.randomUUID() + suffix;
+            // 文件名: type/date/uuid.suffix
+            String objectName = type + "/" + datePath + UUID.randomUUID() + suffix;
 
             // 上传文件
             InputStream inputStream = file.getInputStream();
@@ -76,7 +87,10 @@ public class MinioStrategy implements StorageStrategy {
             log.info("文件上传成功: {}", objectName);
 
             // 返回文件访问URL
-            return minioConfig.getBaseUrl() + "/" + objectName;
+            return FileUploadResponseVO.builder()
+                    .url(minioConfig.getBaseUrl() + "/" + objectName)
+                    .size(file.getSize())
+                    .build();
 
         } catch (MinioException | IOException | InvalidKeyException | NoSuchAlgorithmException e) {
             log.error("MinIO文件上传异常: {}", e.getMessage(), e);
