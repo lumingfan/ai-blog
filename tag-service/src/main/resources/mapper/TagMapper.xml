@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zeuslu.blog.tag.mapper.TagMapper">
-    <select id="selectArticles" resultType="java.lang.Long">
+    <select id="selectArticleIdsByTagNames" resultType="java.lang.Long">
         select
             article_id
         from
@@ -11,7 +11,10 @@
         on
             tb_tag.id = tb_article_tag.tag_id
         <where>
-            ${ew.customSqlSegment}
+            tb_tag.name in
+            <foreach collection="tags" item="tag" separator="," open="(" close=")">
+                #{tag}
+            </foreach>
         </where>
     </select>
     <select id="selectTagsByArticleId" resultType="java.lang.String">

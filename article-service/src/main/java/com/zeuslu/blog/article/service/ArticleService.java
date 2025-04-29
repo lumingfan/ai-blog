@@ -14,7 +14,7 @@ import com.zeuslu.blog.domain.vo.ArticleItemVO;
 */
 public interface ArticleService extends IService<Article> {
 
-    PageResult<ArticleItemVO> getArticleList(ArticlePageQuery articlePageQuery);
+    PageResult<ArticleItemVO> pageArticle(ArticlePageQuery articlePageQuery);
 
     Long postArticle(ArticleDTO articleDTO);
 }

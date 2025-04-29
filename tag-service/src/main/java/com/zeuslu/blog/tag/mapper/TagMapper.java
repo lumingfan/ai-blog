@@ -1,10 +1,7 @@
 package com.zeuslu.blog.tag.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.zeuslu.blog.domain.po.Tag;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
 * @Entity generator.domain.Tag
 */
 public interface TagMapper extends BaseMapper<Tag> {
-    List<Long> selectArticles(List<String> tags, @Param(Constants.WRAPPER) LambdaQueryWrapper<Tag> wrapper);
+    List<Long> selectArticleIdsByTagNames(List<String> tags);
     List<String> selectTagsByArticleId(Long articleId);
 }
 

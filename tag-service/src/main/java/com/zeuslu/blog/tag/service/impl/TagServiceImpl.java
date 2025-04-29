@@ -1,7 +1,6 @@
 package com.zeuslu.blog.tag.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zeuslu.blog.domain.po.Tag;
 import com.zeuslu.blog.tag.mapper.TagMapper;
@@ -22,15 +21,13 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     implements TagService {
 
     @Override
-    public List<Long> getArticleIdsByTags(List<String> tags) {
+    public List<Long> getArticleIdsByTagNames(List<String> tags) {
         // 1. 校验参数
         if (CollUtil.isEmpty(tags)) {
             return Collections.emptyList();
         }
-        // 2. 生成wrapper
-        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<Tag>()
-                .in(Tag::getName, tags);
-        return this.baseMapper.selectArticles(tags, wrapper);
+        // 2. 查询满足条件的文章id列表
+        return this.baseMapper.selectArticleIdsByTagNames(tags);
     }
 
     @Override

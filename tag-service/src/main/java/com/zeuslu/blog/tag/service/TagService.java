@@ -12,7 +12,7 @@ import java.util.List;
 */
 public interface TagService extends IService<Tag> {
 
-    List<Long> getArticleIdsByTags(List<String> tags);
+    List<Long> getArticleIdsByTagNames(List<String> tags);
 
     Long getTagIdByName(String tagName);
 

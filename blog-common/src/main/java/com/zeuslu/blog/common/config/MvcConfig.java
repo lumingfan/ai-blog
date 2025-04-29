@@ -25,9 +25,9 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/auth/login",
                         "/auth/register",
                         "/auth/checkUsername",
-                        "/category/**",
-                        "/tag/**",
-                        "/post/page"
+                        "/categories/**",
+                        "/tags/**",
+                        "/articles/page"
                 )
                 .excludePathPatterns(
                         "/error",

@@ -50,7 +50,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     }
 
     @Override
-    public PageResult<ArticleItemVO> getArticleList(ArticlePageQuery articlePageQuery) {
+    public PageResult<ArticleItemVO> pageArticle(ArticlePageQuery articlePageQuery) {
         // 1. 获取分页参数和必要的过滤参数
         Page<Article> page = articlePageQuery.toPage();
         Long authorId = articlePageQuery.getAuthorId();
@@ -58,7 +58,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         List<String> tags = articlePageQuery.getTags();
 
         // 2. 调用标签服务根据标签过滤文章id
-        List<Long> articleIds = tagService.getArticleIdsByTags(tags);
+        List<Long> articleIds = tagService.getArticleIdsByTagNames(tags);
+
+        if (CollUtil.isNotEmpty(tags) && CollUtil.isEmpty(articleIds)) {
+            // tags 不为空, articleIds为空, 说明该标签下无文章
+            return PageResult.of(page, article -> null);
+        }
 
         // 3. 根据条件分页查询数据
         page = this.lambdaQuery()

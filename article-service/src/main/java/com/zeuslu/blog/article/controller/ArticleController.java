@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController {
     private final ArticleService articleService;
 
-    @GetMapping
+    @GetMapping("/page")
     @Operation(summary = "获取文章列表接口")
-    public Result<PageResult<ArticleItemVO>> getArticleList(ArticlePageQuery articlePageQuery) {
-        return Result.ok(articleService.getArticleList(articlePageQuery));
+    public Result<PageResult<ArticleItemVO>> pageArticle(ArticlePageQuery articlePageQuery) {
+        return Result.ok(articleService.pageArticle(articlePageQuery));
     }
 
     @PostMapping
