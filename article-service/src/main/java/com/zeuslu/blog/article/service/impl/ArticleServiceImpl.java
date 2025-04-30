@@ -163,7 +163,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
                 SaTokenUtil.getId() != null && likeService.isUserLikeArticle(SaTokenUtil.getId(), id)
         );
 
-        // TODO 更新阅读量
+        //6. 更新阅读量
+        // TODO: 增加防刷机制, 使用redis非实时批量更新
+        this.lambdaUpdate().eq(Article::getId, article.getId()).setIncrBy(Article::getReadCount, 1).update();
+        articleDetailVO.setReadCount(articleDetailVO.getReadCount() + 1);
+
         return articleDetailVO;
     }
 
