@@ -3,7 +3,6 @@ package com.zeuslu.blog.user.controller;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.domain.vo.UserDetailVO;
-import com.zeuslu.blog.domain.vo.UserVO;
 import com.zeuslu.blog.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +28,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Operation(summary = "根据用户id获取用户详细信息")
-    public Result<UserDetailVO> getUserById(@PathVariable Long id) {
-        return Result.ok(userService.getUserById(id));
+    public Result<UserDetailVO> getUserDetailById(@PathVariable Long id) {
+        return Result.ok(userService.getUserDetailById(id));
     }
 }

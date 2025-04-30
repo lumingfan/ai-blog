@@ -1,5 +1,6 @@
 package com.zeuslu.blog.common.util;
 
+import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
@@ -11,9 +12,13 @@ public class SaTokenUtil {
      * 从token中获取用户id
      */
     public static Long getId() {
-        if (StpUtil.getLoginId() == null) {
+        try {
+            if (StpUtil.getLoginId() == null) {
+                return null;
+            }
+            return Long.parseLong(StpUtil.getLoginId().toString());
+        } catch (NotLoginException e) {
             return null;
         }
-        return Long.parseLong(StpUtil.getLoginId().toString());
     }
 }

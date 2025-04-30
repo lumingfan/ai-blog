@@ -26,7 +26,9 @@ public interface UserService extends IService<User> {
 
     UserVO getCurrentUser();
 
-    UserDetailVO getUserById(Long id);
+    UserVO getUserById(Long id);
+
+    UserDetailVO getUserDetailById(Long id);
 
     UsernameCheckVO checkUsername(String username);
 

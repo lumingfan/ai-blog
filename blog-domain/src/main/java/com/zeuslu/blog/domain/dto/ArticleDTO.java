@@ -1,6 +1,7 @@
 package com.zeuslu.blog.domain.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @Schema(description = "文章DTO")
 public class ArticleDTO {
     @Schema(description = "文章ID")
+    @NotNull
     private Long id;
     @Schema(description = "文章标题")
     private String title;

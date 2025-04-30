@@ -110,7 +110,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDetailVO getUserById(Long id) {
+    public UserVO getUserById(Long id) {
+        // 1. 获取用户信息
+        User user = this.getById(id);
+        // 2. 用户不存在
+        if (user == null) {
+            throw new CommonException(UserErrorCode.USER_NOT_EXISTED);
+        }
+        return BeanUtil.copyProperties(this.getById(id), UserVO.class);
+    }
+
+    @Override
+    public UserDetailVO getUserDetailById(Long id) {
         // 1. 获取用户信息
         User user = this.getById(id);
         // 2. 用户不存在

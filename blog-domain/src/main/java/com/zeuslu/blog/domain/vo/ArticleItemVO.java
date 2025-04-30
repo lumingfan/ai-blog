@@ -2,9 +2,9 @@ package com.zeuslu.blog.domain.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author lumingfan
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "文章列表项VO")
@@ -28,6 +28,8 @@ public class ArticleItemVO {
     private String coverImage;
     @Schema(description = "文章作者")
     private UserVO author;
+    @Schema(description = "文章分类")
+    private CategoryVO category;
     @Schema(description = "文章发布时间")
     private LocalDateTime publishedAt;
     @Schema(description = "文章阅读数")

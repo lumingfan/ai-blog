@@ -28,6 +28,16 @@
             <artifactId>article-service</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>like-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>storage-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -1,9 +1,12 @@
 package com.zeuslu.blog.tag.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zeuslu.blog.domain.po.ArticleTag;
 import com.zeuslu.blog.domain.po.Tag;
 import com.zeuslu.blog.tag.mapper.TagMapper;
+import com.zeuslu.blog.tag.service.ArticleTagService;
 import com.zeuslu.blog.tag.service.TagService;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,12 @@ import java.util.List;
 @Service
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     implements TagService {
+
+    private final ArticleTagService articleTagService;
+
+    public TagServiceImpl(ArticleTagService articleTagService) {
+        this.articleTagService = articleTagService;
+    }
 
     @Override
     public List<Long> getArticleIdsByTagNames(List<String> tags) {
@@ -54,6 +63,13 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     @Override
     public List<String> getTagsByArticleId(Long articleId) {
         return this.baseMapper.selectTagsByArticleId(articleId);
+    }
+
+    @Override
+    public Boolean removeTagArticleMap(Long articleId) {
+        LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<ArticleTag>()
+                .eq(ArticleTag::getArticleId, articleId);
+        return articleTagService.remove(wrapper);
     }
 }
 

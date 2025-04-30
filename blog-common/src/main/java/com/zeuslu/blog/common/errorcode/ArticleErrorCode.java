@@ -4,7 +4,9 @@ package com.zeuslu.blog.common.errorcode;
  * @author lumingfan
  */
 public enum ArticleErrorCode implements IErrorCode {
-    PUBLISH_FAILED(70000, "文章发布失败, 请稍后重试");
+    PUBLISH_FAILED(70000, "文章发布失败, 请稍后重试"),
+    NOT_AUTHOR(70001, "你不是文章的作者"),
+    ;
 
     private final int code;
     private final String message;

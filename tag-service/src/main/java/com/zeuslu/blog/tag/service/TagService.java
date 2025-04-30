@@ -19,4 +19,6 @@ public interface TagService extends IService<Tag> {
     Long saveTag(String tagName);
 
     List<String> getTagsByArticleId(Long articleId);
+
+    Boolean removeTagArticleMap(Long articleId);
 }

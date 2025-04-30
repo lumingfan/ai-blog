@@ -15,6 +15,7 @@
         <module>storage-service</module>
         <module>article-service</module>
         <module>tag-service</module>
+        <module>like-service</module>
     </modules>
     <version>1.0.0</version>
 

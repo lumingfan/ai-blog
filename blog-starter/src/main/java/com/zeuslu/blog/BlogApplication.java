@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.zeuslu.blog.user.mapper",
         "com.zeuslu.blog.article.mapper",
         "com.zeuslu.blog.tag.mapper",
+        "com.zeuslu.blog.storage.mapper",
+        "com.zeuslu.blog.like.mapper",
 })
 public class BlogApplication {
     public static void main(String[] args) {

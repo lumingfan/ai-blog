@@ -2,7 +2,7 @@ package com.zeuslu.blog.domain.po;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.zeuslu.blog.domain.enums.UserRoleEnums;
+import com.zeuslu.blog.common.enums.enums.UserRoleEnums;
 import lombok.*;
 
 /**
