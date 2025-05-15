@@ -9,6 +9,7 @@ import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.WebUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,13 @@ public class GlobalExceptionHandler {
         log.error("参数校验异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
         return Result.fail(new CommonException(BaseErrorCode.PARAMS_ERROR.code(), Objects.requireNonNull(ex.getBindingResult().getFieldError()).getDefaultMessage()));
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public Result<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.error("请求体解析异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
+        return Result.fail(new CommonException(BaseErrorCode.PARAMS_ERROR.code(), ex.getMessage()));
+    }
+
 
     @ExceptionHandler(NoResourceFoundException.class)
     public void handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletResponse response) {

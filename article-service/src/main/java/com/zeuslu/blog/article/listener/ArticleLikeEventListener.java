@@ -1,7 +1,7 @@
 package com.zeuslu.blog.article.listener;
 
 import com.zeuslu.blog.article.service.ArticleService;
-import com.zeuslu.blog.common.enums.enums.LikeTargetType;
+import com.zeuslu.blog.common.enums.LikeTargetType;
 import com.zeuslu.blog.common.event.LikeEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;

@@ -13,7 +13,7 @@ import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.common.util.WebUtil;
 import com.zeuslu.blog.domain.dto.ArticleDTO;
-import com.zeuslu.blog.domain.dto.ArticleDetailVO;
+import com.zeuslu.blog.domain.vo.ArticleDetailVO;
 import com.zeuslu.blog.domain.dto.ArticlePageQuery;
 import com.zeuslu.blog.domain.po.Article;
 import com.zeuslu.blog.domain.po.Category;

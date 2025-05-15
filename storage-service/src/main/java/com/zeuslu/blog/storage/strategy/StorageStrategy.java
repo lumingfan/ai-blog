@@ -1,4 +1,4 @@
-package com.zeuslu.blog.storage.util;
+package com.zeuslu.blog.storage.strategy;
 
 import com.zeuslu.blog.domain.dto.FileUploadDTO;
 import com.zeuslu.blog.domain.vo.FileUploadResponseVO;

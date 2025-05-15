@@ -2,8 +2,8 @@ package com.zeuslu.blog.storage.config;
 
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
 import com.zeuslu.blog.storage.factory.StorageFactory;
-import com.zeuslu.blog.storage.util.StorageStrategy;
-import com.zeuslu.blog.storage.util.impl.MinioStrategy;
+import com.zeuslu.blog.storage.strategy.StorageStrategy;
+import com.zeuslu.blog.storage.strategy.impl.MinioStrategy;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -21,3 +21,4 @@ storage:
     bucket-name: blog
     base-url: http://localhost:9000/blog
 
+

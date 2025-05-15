@@ -1,6 +1,6 @@
 package com.zeuslu.blog.common.event;
 
-import com.zeuslu.blog.common.enums.enums.LikeTargetType;
+import com.zeuslu.blog.common.enums.LikeTargetType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

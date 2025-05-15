@@ -1,4 +1,4 @@
-package com.zeuslu.blog.common.enums.enums;
+package com.zeuslu.blog.common.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;

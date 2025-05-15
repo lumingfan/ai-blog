@@ -1,6 +1,5 @@
-package com.zeuslu.blog.domain.dto;
+package com.zeuslu.blog.domain.vo;
 
-import com.zeuslu.blog.domain.vo.ArticleItemVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

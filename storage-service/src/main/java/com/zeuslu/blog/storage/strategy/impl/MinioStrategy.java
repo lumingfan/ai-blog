@@ -1,4 +1,4 @@
-package com.zeuslu.blog.storage.util.impl;
+package com.zeuslu.blog.storage.strategy.impl;
 
 import cn.hutool.core.lang.UUID;
 import com.zeuslu.blog.common.errorcode.StorageErrorCode;
@@ -7,7 +7,7 @@ import com.zeuslu.blog.domain.dto.FileUploadDTO;
 import com.zeuslu.blog.domain.vo.FileUploadResponseVO;
 import com.zeuslu.blog.storage.config.StorageConfig;
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
-import com.zeuslu.blog.storage.util.StorageStrategy;
+import com.zeuslu.blog.storage.strategy.StorageStrategy;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import lombok.extern.slf4j.Slf4j;

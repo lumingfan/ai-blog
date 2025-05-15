@@ -2,7 +2,7 @@ package com.zeuslu.blog.storage.factory;
 
 import com.zeuslu.blog.storage.config.StorageConfig;
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
-import com.zeuslu.blog.storage.util.StorageStrategy;
+import com.zeuslu.blog.storage.strategy.StorageStrategy;
 
 import java.util.List;
 import java.util.Map;
