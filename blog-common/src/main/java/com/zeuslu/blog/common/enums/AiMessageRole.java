@@ -10,9 +10,9 @@ import lombok.Getter;
  */
 @Getter
 public enum AiMessageRole {
-    SYSTEM("system"),
-    USER("user"),
-    ASSISTANT("assistant"),
+    SYSTEM("SYSTEM"),
+    USER("USER"),
+    ASSISTANT("ASSISTANT"),
     ;
 
     @JsonValue

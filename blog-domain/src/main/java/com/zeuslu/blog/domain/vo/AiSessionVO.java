@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @Data
 @Schema(description = "获取AI会话列表VO")
 public class AiSessionVO {
+    @Schema(description = "会话ID")
+    private Long id;
     @Schema(description = "用户ID")
     private Long userId;
-    @Schema(description = "会话ID")
-    private Long sessionId;
     @Schema(description = "会话摘要")
     private String summary;
     @Schema(description = "创建时间")

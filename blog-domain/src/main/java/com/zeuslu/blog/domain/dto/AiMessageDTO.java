@@ -11,6 +11,8 @@ import lombok.Data;
 @Schema(description = "AI消息DTO")
 @Data
 public class AiMessageDTO {
+    @Schema(description = "对话ID")
+    private Long conversationId;
     @Schema(description = "会话ID")
     private Long sessionId;
     @Schema(description = "消息内容")

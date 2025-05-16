@@ -28,8 +28,7 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/categories/**",
                         "/tags/**",
                         "/articles/page",
-                        "/articles/detail/**",
-                        "/ai/**"
+                        "/articles/detail/**"
                 )
                 .excludePathPatterns(
                         "/error",

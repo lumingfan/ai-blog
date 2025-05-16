@@ -1,6 +1,7 @@
 package com.zeuslu.blog.common.handler;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.SaTokenContextException;
 import com.zeuslu.blog.common.constant.HttpStatus;
 import com.zeuslu.blog.common.domain.Result;
 import com.zeuslu.blog.common.errorcode.BaseErrorCode;
@@ -39,6 +40,11 @@ public class GlobalExceptionHandler {
     public Result<?> handleRuntimeException(Exception ex) {
         log.error("其他异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
         return Result.fail(new CommonException(BaseErrorCode.SYSTEM_ERROR));
+    }
+
+    @ExceptionHandler(SaTokenContextException.class)
+    public void handleSaTokenContextException(SaTokenContextException ex) {
+        log.error("SaToken上下文异常 -> [{}:{}] [ex] {}", WebUtil.getMethod(), WebUtil.getCurrentUri(), ex.toString());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

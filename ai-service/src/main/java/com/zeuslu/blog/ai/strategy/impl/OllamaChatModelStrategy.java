@@ -55,7 +55,7 @@ public class OllamaChatModelStrategy implements ChatModelStrategy {
         prompt = prompt.options(
                 OllamaOptions.builder().model("deepseek-r1:7b").build()
         );
-        prompt = prompt.advisors(a -> a.param(ChatMemory.CONVERSATION_ID, aiMessageDTO.getSessionId()));
+        prompt = prompt.advisors(a -> a.param(ChatMemory.CONVERSATION_ID, aiMessageDTO.getConversationId()));
         return prompt;
     }
 }

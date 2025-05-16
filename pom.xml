@@ -123,6 +123,12 @@
                 <version>${sa-token.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
             <!-- 腾讯云存储 -->
             <dependency>
                 <groupId>com.qcloud</groupId>
