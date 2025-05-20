@@ -17,6 +17,7 @@
         <module>tag-service</module>
         <module>like-service</module>
         <module>ai-service</module>
+        <module>chat-service</module>
     </modules>
     <version>1.0.0</version>
 
@@ -42,6 +43,7 @@
         <cos.version>5.6.227</cos.version>
         <minio.version>8.5.17</minio.version>
         <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
+        <websocket.version>3.2.12</websocket.version>
     </properties>
 
     <repositories>
@@ -149,6 +151,13 @@
                 <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- websocket -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-websocket</artifactId>
+                <version>${websocket.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

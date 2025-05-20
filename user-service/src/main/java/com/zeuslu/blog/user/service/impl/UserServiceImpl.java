@@ -9,8 +9,10 @@ import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zeuslu.blog.common.errorcode.UserErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
+import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.domain.dto.LoginDTO;
 import com.zeuslu.blog.domain.dto.RegisterDTO;
+import com.zeuslu.blog.domain.dto.UpdateUserDTO;
 import com.zeuslu.blog.domain.po.User;
 import com.zeuslu.blog.domain.vo.LoginResponseVO;
 import com.zeuslu.blog.domain.vo.UserDetailVO;
@@ -157,6 +159,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return this.lambdaQuery().in(User::getId, authorIds).list().stream().map(
                 user -> BeanUtil.copyProperties(user, UserVO.class)
         ).toList();
+    }
+
+    @Override
+    public UserDetailVO updateUser(UpdateUserDTO updateUserDTO) {
+        String avatar = updateUserDTO.getAvatar();
+        String bio = updateUserDTO.getBio();
+        if (!this.lambdaUpdate().eq(User::getId, SaTokenUtil.getId())
+                .set(avatar != null, User::getAvatar, avatar)
+                .set(bio != null, User::getBio, bio)
+                .update()) {
+            throw new CommonException(UserErrorCode.USER_UPDATE_ERROR);
+        }
+        return this.getUserDetailById(SaTokenUtil.getId());
     }
 }
 

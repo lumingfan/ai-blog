@@ -9,7 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>blog-starter</artifactId>
+    <artifactId>chat-service</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,34 +20,21 @@
     <dependencies>
         <dependency>
             <groupId>com.zeuslu.blog</groupId>
+            <artifactId>blog-domain</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
             <artifactId>user-service</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.zeuslu.blog</groupId>
-            <artifactId>article-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zeuslu.blog</groupId>
-            <artifactId>like-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zeuslu.blog</groupId>
-            <artifactId>storage-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zeuslu.blog</groupId>
-            <artifactId>ai-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zeuslu.blog</groupId>
-            <artifactId>chat-service</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
     </dependencies>
 
 </project>

@@ -11,6 +11,8 @@ public enum UserErrorCode implements IErrorCode {
     USER_NOT_EXISTED(50004, "用户不存在"),
     TOO_MANY_REQUESTS(50029, "请求过于频繁"),
     INTERNAL_SERVER_ERROR(50030, "服务繁忙, 请稍后重试"),
+    USER_UPDATE_PARAM_ERROR(50031, "用户更新参数错误"),
+    USER_UPDATE_ERROR(50032, "用户更新失败"),
     ;
 
     private final int code;

@@ -22,6 +22,6 @@ public class FileUploadDTO {
     private MultipartFile file;
     @Schema(description = "文件上传类型")
     private String type;
-    @Schema(description = "文件上传大小限制")
+    @Schema(description = "文件上传大小限制(单位：字节)")
     private Long maxSize;
 }

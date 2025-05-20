@@ -36,7 +36,7 @@ public class AiMessageServiceImpl implements AiMessageService {
         Long userId = SaTokenUtil.getId();
         Flux<String> stream = chatModelFactory.getStrategy(aiMessageDTO.getModel().getModel()).stream(aiMessageDTO);
         Long sessionId = updateSession(aiMessageDTO, userId);
-        return stream.map(content -> {;
+        return stream.map(content -> {
             AiMessageVO message = new AiMessageVO();
             message.setSessionId(sessionId);
             message.setContent(content);
@@ -58,7 +58,8 @@ public class AiMessageServiceImpl implements AiMessageService {
         // 创建会话
         Long sessionId = aiMessageDTO.getSessionId();
         if (sessionId == null) {
-            AiSession session = AiSession.builder().userId(userId).summary(aiMessageDTO.getContent().getContent()).build();
+            String content = aiMessageDTO.getContent().getContent();
+            AiSession session = AiSession.builder().userId(userId).summary(content.substring(0, Math.min(content.length(), 10))).build();
             aiSessionService.save(session);
             sessionId = session.getId();
         } else {
