@@ -1,7 +1,5 @@
 package com.zeuslu.blog.domain.po;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -38,18 +36,12 @@ public class ChatConversationUser {
     private Long userId;
 
     /**
-     * 用户未读消息数量
+     * 用户最后一次离开群聊的时间
      */
-    private Integer unreadCount;
+    private LocalDateTime lastLeaveTime;
 
     /**
      * 创建时间
      */
     private LocalDateTime createdAt;
-
-    /**
-     * 更新时间
-     */
-    @TableField(fill= FieldFill.UPDATE)
-    private LocalDateTime updatedAt;
 }

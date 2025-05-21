@@ -65,8 +65,14 @@ public class ConversationController {
     }
 
     @Operation(summary = "获取消息总数")
-    @GetMapping("{id}/messages/count")
+    @GetMapping("/{id}/messages/count")
     public Result<Integer> getConversationMessageCount(@PathVariable Long id) {
         return Result.ok(messageService.getConversationMessageCount(id));
+    }
+
+    @Operation(summary = "用户关闭聊天窗口")
+    @PutMapping("/{id}/leave")
+    public Result<Boolean> closeConversation(@PathVariable Long id) {
+        return Result.ok(messageService.closeConversation(id));
     }
 }

@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,14 +47,23 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Cha
         Long userId = SaTokenUtil.getId();
         Page<ChatConversation> page = pageQuery.toPage();
         page = this.baseMapper.getConversationsByUserId(page, userId);
-
+        // 表中没有数据, 直接返回
+        if (page.getTotal() == 0) {
+            return PageResult.empty(page);
+        }
 
         List<Long> conversationIds = page.getRecords().stream().map(ChatConversation::getId).toList();
         // 2. 获取未读消息数
-        Map<Long, Integer> unreadCountMap = conversationUserMapper.selectList(new LambdaQueryWrapper<ChatConversationUser>()
-                .select(ChatConversationUser::getConversationId, ChatConversationUser::getUnreadCount)
-                .eq(ChatConversationUser::getUserId, userId)
-                .in(ChatConversationUser::getConversationId, conversationIds)).stream().collect(Collectors.toMap(ChatConversationUser::getConversationId, ChatConversationUser::getUnreadCount));
+        // TODO: 优化为批量查询
+        Map<Long, Integer> unreadCountMap = new HashMap<>();
+        conversationIds.forEach(conversationId -> {
+            // 获取当前用户离开群聊的时间
+            LocalDateTime time = conversationUserMapper.selectOne(new LambdaQueryWrapper<ChatConversationUser>()
+                            .eq(ChatConversationUser::getConversationId, conversationId)
+                            .eq(ChatConversationUser::getUserId, userId))
+                    .getLastLeaveTime();
+            unreadCountMap.put(conversationId, messageService.lambdaQuery().ge(ChatMessage::getCreatedAt, time).eq(ChatMessage::getConversationId, conversationId).count().intValue());
+        });
 
         // 3. 获取各个对话的最后一条消息
         List<Long> lastMessageIds = page.getRecords().stream().map(ChatConversation::getLastMessageId).toList();
@@ -125,12 +135,9 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Cha
             throw new CommonException(ChatErrorCode.DELETE_CHAT_FAILED);
         }
 
-        // 2. 删除用户对话关联
-        // TODO: 优化为消息队列
-        LambdaQueryWrapper<ChatConversationUser> wrapper = new LambdaQueryWrapper<ChatConversationUser>().eq(ChatConversationUser::getConversationId, id);
-        if (conversationUserMapper.delete(wrapper) <= 0) {
-            throw new CommonException(ChatErrorCode.DELETE_CHAT_FAILED);
-        }
+        // 2. TODO: 当所有用户都删除对话后, 删除群聊和用户对话关联
+
+        // 3. TODO: 当所有用户都删除对话后, 删除用户发送的消息
         return true;
     }
 }

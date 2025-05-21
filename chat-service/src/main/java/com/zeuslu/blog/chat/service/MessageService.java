@@ -15,4 +15,6 @@ public interface MessageService extends IService<ChatMessage> {
     Boolean deleteMessage(Long id);
 
     Integer getConversationMessageCount(Long conversationId);
+
+    Boolean closeConversation(Long id);
 }

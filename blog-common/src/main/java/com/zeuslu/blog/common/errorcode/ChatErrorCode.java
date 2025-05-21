@@ -7,7 +7,8 @@ public enum ChatErrorCode implements IErrorCode {
     CREATE_CHAT_FAILED(100001, "创建聊天失败, 请稍后重试"),
     DELETE_CHAT_FAILED(100002, "删除聊天失败, 请稍后重试"),
     SEND_MESSAGE_FAILED(100003, "发送消息失败, 请稍后重试"),
-    DELETE_MESSAGE_FAILED(100004, "撤回消息失败, 请稍后重试")
+    DELETE_MESSAGE_FAILED(100004, "撤回消息失败, 请稍后重试"),
+    USER_NOT_BELONG_TO_CHAT(100005, "用户不属于该聊天"),
     ;
 
     private final int code;
