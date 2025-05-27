@@ -1,6 +1,6 @@
 package com.zeuslu.blog.ai.strategy;
 
-import com.zeuslu.blog.domain.dto.AiMessageDTO;
+import com.zeuslu.blog.api.ai.domain.dto.AiMessageDTO;
 import reactor.core.publisher.Flux;
 
 import java.util.List;

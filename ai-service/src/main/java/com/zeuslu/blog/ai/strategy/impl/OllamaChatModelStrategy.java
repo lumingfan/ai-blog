@@ -2,8 +2,8 @@ package com.zeuslu.blog.ai.strategy.impl;
 
 import com.zeuslu.blog.ai.constant.ChatModelConstant;
 import com.zeuslu.blog.ai.strategy.ChatModelStrategy;
-import com.zeuslu.blog.domain.biz.AiMessageContent;
-import com.zeuslu.blog.domain.dto.AiMessageDTO;
+import com.zeuslu.blog.api.ai.domain.biz.AiMessageContent;
+import com.zeuslu.blog.api.ai.domain.dto.AiMessageDTO;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;

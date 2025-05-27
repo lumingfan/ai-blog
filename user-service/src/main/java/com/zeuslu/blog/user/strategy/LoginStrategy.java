@@ -1,7 +1,7 @@
 package com.zeuslu.blog.user.strategy;
 
-import com.zeuslu.blog.domain.dto.LoginDTO;
-import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.api.user.domain.dto.LoginDTO;
+import com.zeuslu.blog.api.user.domain.po.User;
 
 /**
  * 登录策略类

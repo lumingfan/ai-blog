@@ -7,22 +7,26 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zeuslu.blog.api.article.service.ArticleService;
+import com.zeuslu.blog.api.like.service.LikeService;
+import com.zeuslu.blog.api.tag.service.TagService;
+import com.zeuslu.blog.api.user.domain.dto.LoginDTO;
+import com.zeuslu.blog.api.user.domain.dto.RegisterDTO;
+import com.zeuslu.blog.api.user.domain.dto.UpdateUserDTO;
+import com.zeuslu.blog.api.user.domain.po.User;
+import com.zeuslu.blog.api.user.domain.vo.LoginResponseVO;
+import com.zeuslu.blog.api.user.domain.vo.UserProfileVO;
+import com.zeuslu.blog.api.user.domain.vo.UserVO;
+import com.zeuslu.blog.api.user.domain.vo.UsernameCheckVO;
+import com.zeuslu.blog.api.user.service.UserService;
 import com.zeuslu.blog.common.errorcode.UserErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.SaTokenUtil;
-import com.zeuslu.blog.domain.dto.LoginDTO;
-import com.zeuslu.blog.domain.dto.RegisterDTO;
-import com.zeuslu.blog.domain.dto.UpdateUserDTO;
-import com.zeuslu.blog.domain.po.User;
-import com.zeuslu.blog.domain.vo.LoginResponseVO;
-import com.zeuslu.blog.domain.vo.UserDetailVO;
-import com.zeuslu.blog.domain.vo.UserVO;
-import com.zeuslu.blog.domain.vo.UsernameCheckVO;
-import com.zeuslu.blog.storage.factory.StorageFactory;
 import com.zeuslu.blog.user.factory.LoginStrategyFactory;
 import com.zeuslu.blog.user.mapper.UserMapper;
-import com.zeuslu.blog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -40,12 +44,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
     public static final String DEFAULT_NICKNAME_PREFIX = "user:";
     public static final Integer DEFAULT_NICKNAME_SUFFIX_LEN = 10;
-    private final StorageFactory storageFactory;
     private final LoginStrategyFactory loginStrategyFactory;
+    private final LikeService likeService;
+
+    @Autowired
+    @Lazy
+    private ArticleService articleService;
 
     private final String AVATAR_DIR_PREFIX = "avatar";
     private final String AVATAR_FIELD = "avatar";
     private final String DEFAULT_AVATAR_URL = "https://aiblog-1305314451.cos.ap-shanghai.myqcloud.com/avatar%2Fdefault_avatar.svg";
+    @Autowired
+    private TagService tagService;
 
     @Override
     public void register(RegisterDTO registerDTO) {
@@ -123,15 +133,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDetailVO getUserDetailById(Long id) {
+    public UserProfileVO getUserDetailById(Long id) {
         // 1. 获取用户信息
         User user = this.getById(id);
         // 2. 用户不存在
         if (user == null) {
             throw new CommonException(UserErrorCode.USER_NOT_EXISTED);
         }
-        // 3. TODO: 获取用户对应的文章数量, 粉丝数量, 关注数量, 标签, 当前用户是否已经关注该用户
-        return BeanUtil.copyProperties(this.getById(id), UserDetailVO.class);
+        UserProfileVO userProfileVO = BeanUtil.copyProperties(this.getById(id), UserProfileVO.class);
+        // 3. 获取用户文章数量
+        userProfileVO.setArticlesCount(articleService.getArticleCountByUserId(user.getId()));
+
+        // 4. 获取用户点赞数量, TODO: 获取评论点赞数
+        userProfileVO.setTotalLikes(likeService.getUserLikesCount(user.getId()));
+
+        // 4. TODO: 获取用户对应的粉丝数量, 关注数量, 当前用户是否已经关注该用户
+        userProfileVO.setTags(tagService.getTagsByUserId(user.getId()));
+        return userProfileVO;
     }
 
     @Override
@@ -162,7 +180,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserDetailVO updateUser(UpdateUserDTO updateUserDTO) {
+    public UserProfileVO updateUser(UpdateUserDTO updateUserDTO) {
         String avatar = updateUserDTO.getAvatar();
         String bio = updateUserDTO.getBio();
         if (!this.lambdaUpdate().eq(User::getId, SaTokenUtil.getId())

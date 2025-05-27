@@ -3,11 +3,13 @@ package com.zeuslu.blog.tag.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zeuslu.blog.domain.po.ArticleTag;
-import com.zeuslu.blog.domain.po.Tag;
+import com.zeuslu.blog.api.tag.domain.po.ArticleTag;
+import com.zeuslu.blog.api.tag.domain.po.Tag;
 import com.zeuslu.blog.tag.mapper.TagMapper;
 import com.zeuslu.blog.tag.service.ArticleTagService;
-import com.zeuslu.blog.tag.service.TagService;
+import com.zeuslu.blog.api.tag.service.TagService;
+import com.zeuslu.blog.tag.service.UserTagService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +22,12 @@ import java.util.List;
 * @createDate 2025-04-28 17:18:09
 */
 @Service
+@RequiredArgsConstructor
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
     implements TagService {
 
     private final ArticleTagService articleTagService;
-
-    public TagServiceImpl(ArticleTagService articleTagService) {
-        this.articleTagService = articleTagService;
-    }
+    private final UserTagService userTagService;
 
     @Override
     public List<Long> getArticleIdsByTagNames(List<String> tags) {
@@ -70,6 +70,16 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag>
         LambdaQueryWrapper<ArticleTag> wrapper = new LambdaQueryWrapper<ArticleTag>()
                 .eq(ArticleTag::getArticleId, articleId);
         return articleTagService.remove(wrapper);
+    }
+
+    @Override
+    public List<String> getTagsByUserId(Long id) {
+        return userTagService.getTagsByUserId(id);
+    }
+
+    @Override
+    public boolean saveArticleTags(Long id, List<Long> tagIds) {
+        return articleTagService.saveArticleTags(id, tagIds);
     }
 }
 

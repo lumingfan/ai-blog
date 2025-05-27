@@ -4,8 +4,8 @@ import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.zeuslu.blog.common.errorcode.UserErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
-import com.zeuslu.blog.domain.dto.LoginDTO;
-import com.zeuslu.blog.domain.po.User;
+import com.zeuslu.blog.api.user.domain.dto.LoginDTO;
+import com.zeuslu.blog.api.user.domain.po.User;
 import com.zeuslu.blog.user.constant.UserConstant;
 import com.zeuslu.blog.user.strategy.LoginStrategy;
 

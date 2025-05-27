@@ -1,8 +1,8 @@
 package com.zeuslu.blog.ai.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zeuslu.blog.domain.po.AiSessionConversation;
-import com.zeuslu.blog.domain.vo.AiMessageVO;
+import com.zeuslu.blog.api.ai.domain.po.AiSessionConversation;
+import com.zeuslu.blog.api.ai.domain.vo.AiMessageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.zeuslu.blog.tag.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zeuslu.blog.domain.po.ArticleTag;
+import com.zeuslu.blog.api.tag.domain.po.ArticleTag;
 
 import java.util.List;
 

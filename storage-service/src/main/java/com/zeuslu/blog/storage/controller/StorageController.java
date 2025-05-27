@@ -2,9 +2,9 @@ package com.zeuslu.blog.storage.controller;
 
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.dto.FileUploadDTO;
-import com.zeuslu.blog.domain.vo.FileUploadResponseVO;
-import com.zeuslu.blog.storage.service.StorageService;
+import com.zeuslu.blog.api.storage.domain.dto.FileUploadDTO;
+import com.zeuslu.blog.api.storage.domain.vo.FileUploadResponseVO;
+import com.zeuslu.blog.api.storage.service.StorageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.zeuslu.blog.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zeuslu.blog.domain.po.Category;
-import com.zeuslu.blog.domain.vo.CategoryVO;
+import com.zeuslu.blog.api.article.domain.po.Category;
+import com.zeuslu.blog.api.article.domain.vo.ArticleCategoryVO;
 
 import java.util.List;
 
@@ -10,5 +10,5 @@ import java.util.List;
  * @author lumingfan
  */
 public interface CategoryService extends IService<Category> {
-    List<CategoryVO> getCategories();
+    List<ArticleCategoryVO> getCategories();
 }

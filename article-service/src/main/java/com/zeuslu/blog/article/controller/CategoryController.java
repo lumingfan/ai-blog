@@ -3,7 +3,7 @@ package com.zeuslu.blog.article.controller;
 import com.zeuslu.blog.article.service.CategoryService;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.vo.CategoryVO;
+import com.zeuslu.blog.api.article.domain.vo.ArticleCategoryVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "获取分类列表接口")
-    public Result<List<CategoryVO>> getCategories() {
+    public Result<List<ArticleCategoryVO>> getCategories() {
         return Result.ok(categoryService.getCategories());
     }
 

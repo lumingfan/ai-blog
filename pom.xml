@@ -10,7 +10,7 @@
     <modules>
         <module>user-service</module>
         <module>blog-common</module>
-        <module>blog-domain</module>
+        <module>blog-api</module>
         <module>blog-starter</module>
         <module>storage-service</module>
         <module>article-service</module>
@@ -18,6 +18,8 @@
         <module>like-service</module>
         <module>ai-service</module>
         <module>chat-service</module>
+        <module>notification-service</module>
+        <module>comment-service</module>
     </modules>
     <version>1.0.0</version>
 
@@ -124,6 +126,11 @@
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-template</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>cn.dev33</groupId>
@@ -192,8 +199,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <build>

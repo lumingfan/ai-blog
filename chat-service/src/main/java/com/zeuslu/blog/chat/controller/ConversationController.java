@@ -1,15 +1,15 @@
 package com.zeuslu.blog.chat.controller;
 
-import com.zeuslu.blog.chat.service.ConversationService;
-import com.zeuslu.blog.chat.service.MessageService;
+import com.zeuslu.blog.api.chat.service.ConversationService;
+import com.zeuslu.blog.api.chat.service.MessageService;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.PageQuery;
 import com.zeuslu.blog.common.domain.PageResult;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.dto.ChatMessageDTO;
-import com.zeuslu.blog.domain.dto.ConversationDTO;
-import com.zeuslu.blog.domain.vo.ChatMessageVO;
-import com.zeuslu.blog.domain.vo.ConversationVO;
+import com.zeuslu.blog.api.chat.domain.dto.ChatMessageDTO;
+import com.zeuslu.blog.api.chat.domain.dto.ConversationDTO;
+import com.zeuslu.blog.api.chat.domain.vo.ChatMessageVO;
+import com.zeuslu.blog.api.chat.domain.vo.ConversationVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -13,7 +13,7 @@
             select conversation_id from tb_ai_session_conversation where session_id = #{sessionId}
         )
     </delete>
-    <select id="getSessionDetail" resultType="com.zeuslu.blog.domain.vo.AiMessageVO">
+    <select id="getSessionDetail" resultType="com.zeuslu.blog.api.ai.domain.vo.AiMessageVO">
         select session_id, content, type as role, timestamp
         from
             tb_ai_session_conversation as sc join SPRING_AI_CHAT_MEMORY as sacm

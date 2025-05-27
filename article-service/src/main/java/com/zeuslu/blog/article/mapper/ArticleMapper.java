@@ -1,7 +1,7 @@
 package com.zeuslu.blog.article.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zeuslu.blog.domain.po.Article;
+import com.zeuslu.blog.api.article.domain.po.Article;
 
 /**
 * @author lumingfan

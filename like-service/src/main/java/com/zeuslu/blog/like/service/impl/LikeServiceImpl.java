@@ -2,15 +2,18 @@ package com.zeuslu.blog.like.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zeuslu.blog.api.article.service.ArticleService;
+import com.zeuslu.blog.api.like.domain.po.Like;
+import com.zeuslu.blog.api.like.domain.vo.LikeResponseVO;
+import com.zeuslu.blog.api.like.service.LikeService;
 import com.zeuslu.blog.common.enums.LikeTargetType;
 import com.zeuslu.blog.common.event.LikeEvent;
 import com.zeuslu.blog.common.util.SaTokenUtil;
-import com.zeuslu.blog.domain.po.Like;
-import com.zeuslu.blog.domain.vo.LikeResponseVO;
 import com.zeuslu.blog.like.mapper.LikeMapper;
-import com.zeuslu.blog.like.service.LikeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements LikeService {
     private final ApplicationEventPublisher eventPublisher;
 
+    @Autowired
+    @Lazy
+    private ArticleService articleService;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LikeResponseVO likeArticle(Long targetId) {
@@ -32,8 +39,8 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
                 .targetType(LikeTargetType.ARTICLE)
                 .build());
 
-        // 发布点赞事件，由文章服务监听处理
-        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, true));
+        // 发布点赞事件，由文章/通知服务监听处理
+        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), true));
 
 
         // 获取该文章点赞数
@@ -55,7 +62,7 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
         this.remove(wrapper);
 
         // 更新文章表的点赞数
-        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, false));
+        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), false));
         // 获取该文章点赞数
         Integer likeCount = this.lambdaQuery()
                 .eq(Like::getTargetId, targetId)
@@ -72,4 +79,28 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
                 .eq(Like::getTargetType, LikeTargetType.ARTICLE)
                 .exists();
     }
+
+    @Override
+    public Integer getUserLikesCount(Long userId) {
+        Integer count = articleService.getLikeCountByUserId(userId);
+        // TODO: 获取评论点赞数
+        return count;
+    }
+
+    @Override
+    public Integer getCommentLikeCount(Long commentId) {
+        return this.lambdaQuery().eq(Like::getTargetType, LikeTargetType.COMMENT).eq(Like::getTargetId, commentId)
+                .count().intValue();
+    }
+
+    @Override
+    public Boolean isUserLikeComment(Long userId, Long commentId) {
+        return this.lambdaQuery()
+                .eq(Like::getUserId, userId)
+                .eq(Like::getTargetId, commentId)
+                .eq(Like::getTargetType, LikeTargetType.COMMENT)
+                .exists();
+    }
+
+
 }

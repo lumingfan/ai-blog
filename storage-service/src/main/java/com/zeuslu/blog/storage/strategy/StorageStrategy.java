@@ -1,7 +1,7 @@
 package com.zeuslu.blog.storage.strategy;
 
-import com.zeuslu.blog.domain.dto.FileUploadDTO;
-import com.zeuslu.blog.domain.vo.FileUploadResponseVO;
+import com.zeuslu.blog.api.storage.domain.dto.FileUploadDTO;
+import com.zeuslu.blog.api.storage.domain.vo.FileUploadResponseVO;
 import com.zeuslu.blog.storage.enums.StorageTypeEnum;
 
 /**

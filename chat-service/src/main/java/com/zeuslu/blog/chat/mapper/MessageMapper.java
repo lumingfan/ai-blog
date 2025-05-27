@@ -1,7 +1,7 @@
 package com.zeuslu.blog.chat.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zeuslu.blog.domain.po.ChatMessage;
+import com.zeuslu.blog.api.chat.domain.po.ChatMessage;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

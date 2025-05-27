@@ -2,12 +2,12 @@ package com.zeuslu.blog.user.controller;
 
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.constant.DtoParamConstant;
-import com.zeuslu.blog.domain.dto.LoginDTO;
-import com.zeuslu.blog.domain.dto.RegisterDTO;
-import com.zeuslu.blog.domain.vo.LoginResponseVO;
-import com.zeuslu.blog.domain.vo.UsernameCheckVO;
-import com.zeuslu.blog.user.service.UserService;
+import com.zeuslu.blog.api.user.constant.AuthDtoParamConstant;
+import com.zeuslu.blog.api.user.domain.dto.LoginDTO;
+import com.zeuslu.blog.api.user.domain.dto.RegisterDTO;
+import com.zeuslu.blog.api.user.domain.vo.LoginResponseVO;
+import com.zeuslu.blog.api.user.domain.vo.UsernameCheckVO;
+import com.zeuslu.blog.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -46,7 +46,7 @@ public class AuthController {
     public Result<UsernameCheckVO> checkUsername(
             @RequestParam
             @Valid
-            @Size(min=DtoParamConstant.USERNAME_MIN_LENGTH, max=DtoParamConstant.USERNAME_MAX_LENGTH)
+            @Size(min= AuthDtoParamConstant.USERNAME_MIN_LENGTH, max= AuthDtoParamConstant.USERNAME_MAX_LENGTH)
             String username) {
         return Result.ok(userService.checkUsername(username));
     }

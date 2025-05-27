@@ -4,34 +4,30 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zeuslu.blog.api.article.domain.dto.ArticlePageQuery;
+import com.zeuslu.blog.api.article.domain.dto.SaveArticleDTO;
+import com.zeuslu.blog.api.article.domain.po.Article;
+import com.zeuslu.blog.api.article.domain.po.Category;
+import com.zeuslu.blog.api.article.domain.vo.ArticleCategoryVO;
+import com.zeuslu.blog.api.article.domain.vo.ArticleDetailVO;
+import com.zeuslu.blog.api.article.domain.vo.ArticleItemVO;
+import com.zeuslu.blog.api.article.service.ArticleService;
+import com.zeuslu.blog.api.like.service.LikeService;
+import com.zeuslu.blog.api.tag.service.TagService;
+import com.zeuslu.blog.api.user.domain.vo.UserVO;
+import com.zeuslu.blog.api.user.service.UserService;
 import com.zeuslu.blog.article.mapper.ArticleMapper;
-import com.zeuslu.blog.article.service.ArticleService;
 import com.zeuslu.blog.article.service.CategoryService;
 import com.zeuslu.blog.common.domain.PageResult;
 import com.zeuslu.blog.common.errorcode.ArticleErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.SaTokenUtil;
-import com.zeuslu.blog.common.util.WebUtil;
-import com.zeuslu.blog.domain.dto.ArticleDTO;
-import com.zeuslu.blog.domain.vo.ArticleDetailVO;
-import com.zeuslu.blog.domain.dto.ArticlePageQuery;
-import com.zeuslu.blog.domain.po.Article;
-import com.zeuslu.blog.domain.po.Category;
-import com.zeuslu.blog.domain.vo.ArticleItemVO;
-import com.zeuslu.blog.domain.vo.CategoryVO;
-import com.zeuslu.blog.domain.vo.UserVO;
-import com.zeuslu.blog.like.service.LikeService;
-import com.zeuslu.blog.tag.service.ArticleTagService;
-import com.zeuslu.blog.tag.service.TagService;
-import com.zeuslu.blog.user.service.UserService;
-import org.springframework.http.HttpMethod;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,22 +37,14 @@ import java.util.stream.Collectors;
 * @createDate 2025-04-27 21:50:04
 */
 @Service
+@RequiredArgsConstructor
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     implements ArticleService {
 
     private final UserService userService;
     private final TagService tagService;
-    private final ArticleTagService articleTagService;
     private final CategoryService categoryService;
     private final LikeService likeService;
-
-    public ArticleServiceImpl(UserService userService, TagService tagService, ArticleTagService articleTagService, CategoryService categoryService, LikeService likeService) {
-        this.userService = userService;
-        this.tagService = tagService;
-        this.articleTagService = articleTagService;
-        this.categoryService = categoryService;
-        this.likeService = likeService;
-    }
 
     @Override
     public PageResult<ArticleItemVO> pageArticle(ArticlePageQuery articlePageQuery) {
@@ -91,15 +79,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         return PageResult.of(page, article -> {
             // 6. 相同属性直接转换
             ArticleItemVO articleItemVO = BeanUtil.copyProperties(article, ArticleItemVO.class);
-            // 7. 发布时间
-            articleItemVO.setPublishedAt(article.getCreatedAt());
-            // 8. 作者信息
+            // 7. 作者信息
             articleItemVO.setAuthor(authors.get(article.getAuthorId()));
-            // 9. 标签信息
+            // 8. 标签信息
             articleItemVO.setTags(tagService.getTagsByArticleId(article.getId()));
-            // 10. 分类信息
-            articleItemVO.setCategory(BeanUtil.copyProperties(categoryService.getById(article.getCategoryId()), CategoryVO.class));
-            // 11. 点赞信息
+            // 9. 分类信息
+            articleItemVO.setCategory(BeanUtil.copyProperties(categoryService.getById(article.getCategoryId()), ArticleCategoryVO.class));
+            // 10. 点赞信息
             articleItemVO.setIsLiked(
                     SaTokenUtil.getId() != null && likeService.isUserLikeArticle(SaTokenUtil.getId(), article.getId())
             );
@@ -110,21 +96,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 
     @Override
     @Transactional
-    public Long postArticle(ArticleDTO articleDTO) {
+    public Long postArticle(SaveArticleDTO saveArticleDTO) {
         // 1. 保存文章到文章数据库表
-        Article article = BeanUtil.copyProperties(articleDTO, Article.class);
+        Article article = BeanUtil.copyProperties(saveArticleDTO, Article.class);
         article.setAuthorId(SaTokenUtil.getId());
         if (!this.save(article)) {
             throw new CommonException(ArticleErrorCode.PUBLISH_FAILED);
         }
 
         // 2. 根据标签数据库表查询标签id,没有查询到的标签直接保存到标签数据库中,并返回标签id
-        List<Long> tagIds = articleDTO.getTags().stream().map(
+        List<Long> tagIds = saveArticleDTO.getTags().stream().map(
                 tagService::saveTag
         ).toList();
 
         // 3. 插入标签-文章数据库
-        if (CollUtil.isNotEmpty(tagIds) && !articleTagService.saveArticleTags(article.getId(), tagIds)) {
+        if (CollUtil.isNotEmpty(tagIds) && !tagService.saveArticleTags(article.getId(), tagIds)) {
             throw new CommonException(ArticleErrorCode.PUBLISH_FAILED);
         }
 
@@ -137,18 +123,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     }
 
     @Override
-    public ArticleDetailVO getArticleById(Long id) throws NoResourceFoundException {
+    public ArticleDetailVO getArticleById(Long id) {
         // 1. 查询文章
         Article article = this.getById(id);
         if (article == null) {
-            throw new NoResourceFoundException(HttpMethod.GET, Objects.requireNonNull(WebUtil.getCurrentUri()));
+            throw new CommonException(ArticleErrorCode.NO_ARTICLE);
         }
 
         // 2. 查询作者
         UserVO author = userService.getUserById(article.getAuthorId());
 
         // 3. 查询分类
-        CategoryVO category = BeanUtil.copyProperties(categoryService.getById(article.getCategoryId()), CategoryVO.class);
+        ArticleCategoryVO category = BeanUtil.copyProperties(categoryService.getById(article.getCategoryId()), ArticleCategoryVO.class);
 
         // 4. 查询标签
         List<String> tags = tagService.getTagsByArticleId(id);
@@ -172,42 +158,42 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
     }
 
     @Override
-    public Long updateArticle(ArticleDTO articleDTO) {
+    public Long updateArticle(SaveArticleDTO saveArticleDTO) {
         // 1. 校验是否是当前作者
-        Long authorId = this.lambdaQuery().select(Article::getAuthorId).eq(Article::getId, articleDTO.getId()).one().getAuthorId();
+        Long authorId = this.lambdaQuery().select(Article::getAuthorId).eq(Article::getId, saveArticleDTO.getId()).one().getAuthorId();
         if (authorId == null || !authorId.equals(SaTokenUtil.getId())) {
             throw new CommonException(ArticleErrorCode.NOT_AUTHOR);
         }
 
         boolean updated = this.lambdaUpdate()
-                .eq(Article::getId, articleDTO.getId())
-                .set(articleDTO.getTitle() != null, Article::getTitle, articleDTO.getTitle())
-                .set(articleDTO.getContent() != null, Article::getContent, articleDTO.getContent())
-                .set(articleDTO.getSummary() != null, Article::getSummary, articleDTO.getSummary())
-                .set(articleDTO.getDraft() != null, Article::getDraft, articleDTO.getDraft())
-                .set(articleDTO.getCoverImage() != null, Article::getCoverImage, articleDTO.getCoverImage())
-                .set(articleDTO.getCategoryId() != null, Article::getCategoryId, articleDTO.getCategoryId())
+                .eq(Article::getId, saveArticleDTO.getId())
+                .set(saveArticleDTO.getTitle() != null, Article::getTitle, saveArticleDTO.getTitle())
+                .set(saveArticleDTO.getContent() != null, Article::getContent, saveArticleDTO.getContent())
+                .set(saveArticleDTO.getSummary() != null, Article::getSummary, saveArticleDTO.getSummary())
+                .set(saveArticleDTO.getDraft() != null, Article::getDraft, saveArticleDTO.getDraft())
+                .set(saveArticleDTO.getCoverImage() != null, Article::getCoverImage, saveArticleDTO.getCoverImage())
+                .set(saveArticleDTO.getCategoryId() != null, Article::getCategoryId, saveArticleDTO.getCategoryId())
                 .update();
         if (!updated) {
             throw new CommonException(ArticleErrorCode.PUBLISH_FAILED);
         }
         // 更新标签
-        List<String> originTags = tagService.getTagsByArticleId(articleDTO.getId());
-        if (!CollUtil.isEqualList(originTags, articleDTO.getTags())) {
+        List<String> originTags = tagService.getTagsByArticleId(saveArticleDTO.getId());
+        if (!CollUtil.isEqualList(originTags, saveArticleDTO.getTags())) {
             // 1. 删除旧的标签映射
-            if (!tagService.removeTagArticleMap(articleDTO.getId())) {
+            if (!tagService.removeTagArticleMap(saveArticleDTO.getId())) {
                 throw new CommonException(ArticleErrorCode.PUBLISH_FAILED);
             }
             // 2. 增加新标签
-            List<Long> tagIds = articleDTO.getTags().stream().map(
+            List<Long> tagIds = saveArticleDTO.getTags().stream().map(
                     tagService::saveTag
             ).toList();
             // 3. 插入标签-文章数据库
-            if (CollUtil.isNotEmpty(tagIds) && !articleTagService.saveArticleTags(articleDTO.getId(), tagIds)) {
+            if (CollUtil.isNotEmpty(tagIds) && !tagService.saveArticleTags(saveArticleDTO.getId(), tagIds)) {
                 throw new CommonException(ArticleErrorCode.PUBLISH_FAILED);
             }
         }
-        return articleDTO.getId();
+        return saveArticleDTO.getId();
     }
 
     @Override
@@ -234,6 +220,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
                 .eq(Article::getId, targetId)
                 .setDecrBy(Article::getLikeCount, 1)
                 .update();
+    }
+
+    @Override
+    public Integer getLikeCountByUserId(Long userId) {
+        return this.lambdaQuery()
+                .eq(Article::getAuthorId, userId).list().stream()
+                .reduce(0L, (sum, article) -> sum + article.getLikeCount(), Long::sum).intValue();
+    }
+
+    @Override
+    public Integer getArticleCountByUserId(Long userId) {
+        return this.lambdaQuery().eq(Article::getAuthorId, userId).count().intValue();
     }
 }
 

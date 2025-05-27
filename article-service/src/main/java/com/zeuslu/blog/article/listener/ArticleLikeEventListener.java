@@ -1,6 +1,6 @@
 package com.zeuslu.blog.article.listener;
 
-import com.zeuslu.blog.article.service.ArticleService;
+import com.zeuslu.blog.api.article.service.ArticleService;
 import com.zeuslu.blog.common.enums.LikeTargetType;
 import com.zeuslu.blog.common.event.LikeEvent;
 import lombok.RequiredArgsConstructor;

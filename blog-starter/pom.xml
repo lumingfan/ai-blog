@@ -48,6 +48,16 @@
             <artifactId>chat-service</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>notification-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zeuslu.blog</groupId>
+            <artifactId>tag-service</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

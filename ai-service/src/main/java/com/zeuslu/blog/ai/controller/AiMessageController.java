@@ -1,13 +1,13 @@
 package com.zeuslu.blog.ai.controller;
 
-import com.zeuslu.blog.ai.service.AiMessageService;
+import com.zeuslu.blog.api.ai.service.AiMessageService;
 import com.zeuslu.blog.common.annotation.Log;
 import com.zeuslu.blog.common.domain.PageQuery;
 import com.zeuslu.blog.common.domain.PageResult;
 import com.zeuslu.blog.common.domain.Result;
-import com.zeuslu.blog.domain.dto.AiMessageDTO;
-import com.zeuslu.blog.domain.vo.AiMessageVO;
-import com.zeuslu.blog.domain.vo.AiSessionVO;
+import com.zeuslu.blog.api.ai.domain.dto.AiMessageDTO;
+import com.zeuslu.blog.api.ai.domain.vo.AiMessageVO;
+import com.zeuslu.blog.api.ai.domain.vo.AiSessionVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

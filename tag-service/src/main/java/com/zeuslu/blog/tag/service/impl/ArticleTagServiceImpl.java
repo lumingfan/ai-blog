@@ -1,7 +1,7 @@
 package com.zeuslu.blog.tag.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zeuslu.blog.domain.po.ArticleTag;
+import com.zeuslu.blog.api.tag.domain.po.ArticleTag;
 import com.zeuslu.blog.tag.mapper.ArticleTagMapper;
 import com.zeuslu.blog.tag.service.ArticleTagService;
 import org.springframework.stereotype.Service;

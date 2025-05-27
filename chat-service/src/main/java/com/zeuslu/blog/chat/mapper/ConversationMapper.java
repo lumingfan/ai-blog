@@ -2,7 +2,7 @@ package com.zeuslu.blog.chat.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zeuslu.blog.domain.po.ChatConversation;
+import com.zeuslu.blog.api.chat.domain.po.ChatConversation;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
