@@ -7,16 +7,37 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 点赞模块
+ * 评论回复表
  * @author lumingfan
  */
 @Data
 @TableName("tb_comment_reply")
 public class CommentReply {
+    /**
+     * 主键id
+     */
     @TableId
     private Long id;
+
+    /**
+     * 回复内容
+     */
     private String content;
-    private Long parentId;
+
+    /**
+     * 回复的评论id
+     */
+    private Long commentId;
+
+    /**
+     * 发起回复的用户id
+     */
     private Long userId;
+
+    /**
+     * 被回复的用户id(仅当用户回复他人回复时使用, 回复评论使用commentId)
+     */
+    private Long atUserId;
+
     private LocalDateTime createdAt;
 }

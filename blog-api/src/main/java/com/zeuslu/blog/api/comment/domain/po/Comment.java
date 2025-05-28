@@ -8,17 +8,36 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 点赞模块
+ * 评论表
  * @author lumingfan
  */
 @Data
 @TableName("tb_comment")
 public class Comment {
+    /**
+     * 主键id
+     */
     @TableId
     private Long id;
+
+    /**
+     * 评论内容
+     */
     private String content;
+
+    /**
+     * 评论的对象(视频, 文章)
+     */
     private Long subjectId;
+
+    /**
+     * 被评论对象类型(视频, 文章)
+     */
     private CommentType subjectType;
+
+    /**
+     * 发起评论的用户id
+     */
     private Long userId;
     private LocalDateTime createdAt;
 }

@@ -1,24 +1,23 @@
 package com.zeuslu.blog.api.comment.domain.dto;
 
-import com.zeuslu.blog.common.enums.CommentType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * 创建评论DTO
+ * 创建评论回复DTO
  * @author lumingfan
  */
-@Schema(description = "创建评论DTO")
+@Schema(description = "创建评论回复DTO")
 @Data
-public class CreateCommentDTO {
-    @Schema(description = "评论对象id(文章id,视频id)")
+public class CreateCommentReplyDTO {
+    @Schema(description = "评论id")
     @NotNull
-    private Long subjectId;
-    @Schema(description = "评论对象类型")
-    private CommentType subjectType;
+    private Long commentId;
     @Schema(description = "评论内容")
     @NotBlank
     private String content;
+    @Schema(description = "被回复的用户id")
+    private Long atUserId;
 }

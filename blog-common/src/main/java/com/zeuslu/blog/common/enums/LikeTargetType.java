@@ -10,6 +10,7 @@ import lombok.Getter;
 public enum LikeTargetType {
     ARTICLE(1, "文章"),
     COMMENT(2, "评论"),
+    COMMENT_REPLY(3, "评论回复")
     ;
 
     @EnumValue

@@ -19,4 +19,8 @@ public interface LikeService extends IService<Like> {
     Integer getCommentLikeCount(Long commentId);
 
     Boolean isUserLikeComment(Long userId, Long commentId);
+
+    Integer getCommentReplyLikeCount(Long commentReplyId);
+
+    Boolean isUserLikeReply(Long userId, Long replyId);
 }

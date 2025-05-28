@@ -102,5 +102,20 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
                 .exists();
     }
 
+    @Override
+    public Integer getCommentReplyLikeCount(Long commentReplyId) {
+        return this.lambdaQuery().eq(Like::getTargetType, LikeTargetType.COMMENT_REPLY)
+                .eq(Like::getTargetId, commentReplyId).count().intValue();
+    }
+
+    @Override
+    public Boolean isUserLikeReply(Long userId, Long replyId) {
+        return this.lambdaQuery()
+                .eq(Like::getUserId, userId)
+                .eq(Like::getTargetId, replyId)
+                .eq(Like::getTargetType, LikeTargetType.COMMENT_REPLY)
+                .exists();
+    }
+
 
 }

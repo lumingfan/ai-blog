@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.zeuslu.blog.ai.mapper",
         "com.zeuslu.blog.chat.mapper",
         "com.zeuslu.blog.notification.mapper",
+        "com.zeuslu.blog.comment.mapper",
 })
 public class BlogApplication {
     public static void main(String[] args) {

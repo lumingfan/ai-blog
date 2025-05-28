@@ -46,6 +46,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new StringToArticleSortByEnumsConverter());
         registry.addConverter(new StringToNotificationTypeConverter());
+        registry.addConverter(new StringToCommentTypeConverter());
     }
 
     /**
