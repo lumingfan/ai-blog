@@ -1,33 +1,28 @@
-package com.zeuslu.blog.article.listener;
+package com.zeuslu.blog.notification.listener;
 
-import com.zeuslu.blog.api.article.service.ArticleService;
+import com.zeuslu.blog.api.notification.service.NotificationService;
 import com.zeuslu.blog.common.constant.RocketMqConstant;
 import com.zeuslu.blog.common.enums.LikeTargetType;
 import com.zeuslu.blog.common.event.LikeEvent;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
 /**
- * 监听点赞事件
  * @author lumingfan
  */
-@Slf4j
 @Component
 @RequiredArgsConstructor
-@RocketMQMessageListener(consumerGroup = RocketMqConstant.CONSUMER_GROUP_ARTICLE_LIKE_MESSAGE, topic = RocketMqConstant.TOPIC_LIKE_MESSAGE)
-public class ArticleLikeEventListener implements RocketMQListener<LikeEvent> {
-    private final ArticleService articleService;
+@RocketMQMessageListener(consumerGroup = RocketMqConstant.CONSUMER_GROUP_NOTIFICATION_LIKE_MESSAGE, topic = RocketMqConstant.TOPIC_LIKE_MESSAGE)
+public class NotificationLikeEventListener implements RocketMQListener<LikeEvent> {
+    private final NotificationService notificationService;
 
     @Override
     public void onMessage(LikeEvent message) {
         if (message.getTargetType() == LikeTargetType.ARTICLE) {
             if (message.getIsLike()) {
-                articleService.incrementLikeCount(message.getTargetId());
-            } else {
-                articleService.decrementLikeCount(message.getTargetId());
+                notificationService.noticeLikeOnArticle(message.getTargetId(), message.getUserId());
             }
         }
     }

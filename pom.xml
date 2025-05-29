@@ -46,6 +46,8 @@
         <minio.version>8.5.17</minio.version>
         <spring-ai.version>1.0.0-SNAPSHOT</spring-ai.version>
         <websocket.version>3.2.12</websocket.version>
+        <rocketmq.version>2.3.3</rocketmq.version>
+        <rocketmq-client.version>5.3.2</rocketmq-client.version>
     </properties>
 
     <repositories>
@@ -165,6 +167,19 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-websocket</artifactId>
                 <version>${websocket.version}</version>
+            </dependency>
+
+            <!-- rocketmq-->
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>${rocketmq-client.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

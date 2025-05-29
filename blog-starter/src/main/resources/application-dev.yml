@@ -42,4 +42,12 @@ storage:
     bucket-name: blog
     base-url: http://localhost:9000/blog
 
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: blog-starter-producer
+    send-message-timeout: 3000
+    retry-times-when-send-failed: 3
+    max-message-size: 1024000
+    compress-message-body-threshold: 102400
 

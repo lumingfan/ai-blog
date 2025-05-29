@@ -6,13 +6,14 @@ import com.zeuslu.blog.api.article.service.ArticleService;
 import com.zeuslu.blog.api.like.domain.po.Like;
 import com.zeuslu.blog.api.like.domain.vo.LikeResponseVO;
 import com.zeuslu.blog.api.like.service.LikeService;
+import com.zeuslu.blog.common.constant.RocketMqConstant;
 import com.zeuslu.blog.common.enums.LikeTargetType;
 import com.zeuslu.blog.common.event.LikeEvent;
 import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.like.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements LikeService {
-    private final ApplicationEventPublisher eventPublisher;
+    private final RocketMQTemplate rocketMQTemplate;
 
     @Autowired
     @Lazy
@@ -40,7 +41,7 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
                 .build());
 
         // 发布点赞事件，由文章/通知服务监听处理
-        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), true));
+        rocketMQTemplate.convertAndSend(RocketMqConstant.TOPIC_LIKE_MESSAGE, new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), true));
 
 
         // 获取该文章点赞数
@@ -62,7 +63,7 @@ public class LikeServiceImpl extends ServiceImpl<LikeMapper, Like> implements Li
         this.remove(wrapper);
 
         // 更新文章表的点赞数
-        eventPublisher.publishEvent(new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), false));
+        rocketMQTemplate.convertAndSend(RocketMqConstant.TOPIC_LIKE_MESSAGE, new LikeEvent(targetId, LikeTargetType.ARTICLE, SaTokenUtil.getId(), false));
         // 获取该文章点赞数
         Integer likeCount = this.lambdaQuery()
                 .eq(Like::getTargetId, targetId)

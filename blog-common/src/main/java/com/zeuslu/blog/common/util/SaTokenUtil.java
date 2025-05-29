@@ -1,6 +1,7 @@
 package com.zeuslu.blog.common.util;
 
 import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.SaTokenContextException;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
@@ -17,7 +18,7 @@ public class SaTokenUtil {
                 return null;
             }
             return Long.parseLong(StpUtil.getLoginId().toString());
-        } catch (NotLoginException e) {
+        } catch (NotLoginException | SaTokenContextException e) {
             return null;
         }
     }

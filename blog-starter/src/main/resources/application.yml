@@ -52,5 +52,10 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: true
+  # 不允许从cookie中读取token
+  is-read-cookie: false
+  # token 前缀
+  token-prefix: Bearer
+
 ai:
   max-messages: 20
