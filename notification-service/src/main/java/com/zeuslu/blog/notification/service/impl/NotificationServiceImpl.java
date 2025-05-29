@@ -81,6 +81,10 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
         ArticleDetailVO article = articleService.getArticleById(targetId);
         Long userId = article.getAuthor().getId();
         String title = article.getTitle();
+        if (userId.equals(senderId)) {
+            // 如果点赞者是文章作者, 则不发送通知
+            return;
+        }
 
         // 检查是否已经存在相同的通知(同一用户取消点赞后再次点赞时不重复发送通知)
         if (this.lambdaQuery().eq(Notification::getUserId, userId)
