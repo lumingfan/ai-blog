@@ -14,17 +14,22 @@ import com.zeuslu.blog.api.user.domain.dto.LoginDTO;
 import com.zeuslu.blog.api.user.domain.dto.RegisterDTO;
 import com.zeuslu.blog.api.user.domain.dto.UpdateUserDTO;
 import com.zeuslu.blog.api.user.domain.po.User;
+import com.zeuslu.blog.api.user.domain.po.UserFollow;
 import com.zeuslu.blog.api.user.domain.vo.LoginResponseVO;
 import com.zeuslu.blog.api.user.domain.vo.UserProfileVO;
 import com.zeuslu.blog.api.user.domain.vo.UserVO;
 import com.zeuslu.blog.api.user.domain.vo.UsernameCheckVO;
 import com.zeuslu.blog.api.user.service.UserService;
+import com.zeuslu.blog.common.constant.RocketMqConstant;
 import com.zeuslu.blog.common.errorcode.UserErrorCode;
+import com.zeuslu.blog.common.event.FollowEvent;
 import com.zeuslu.blog.common.exception.CommonException;
 import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.user.factory.LoginStrategyFactory;
 import com.zeuslu.blog.user.mapper.UserMapper;
+import com.zeuslu.blog.user.service.UserFollowService;
 import lombok.RequiredArgsConstructor;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DuplicateKeyException;
@@ -46,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public static final Integer DEFAULT_NICKNAME_SUFFIX_LEN = 10;
     private final LoginStrategyFactory loginStrategyFactory;
     private final LikeService likeService;
+    private final UserFollowService userFollowService;
+    private final RocketMQTemplate rocketMQTemplate;
 
     @Autowired
     @Lazy
@@ -144,11 +151,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 3. 获取用户文章数量
         userProfileVO.setArticlesCount(articleService.getArticleCountByUserId(user.getId()));
 
-        // 4. 获取用户点赞数量, TODO: 获取评论点赞数
+        // 4. 获取用户点赞数量
         userProfileVO.setTotalLikes(likeService.getUserLikesCount(user.getId()));
 
-        // 4. TODO: 获取用户对应的粉丝数量, 关注数量, 当前用户是否已经关注该用户
+        // 5. 获取用户标签
         userProfileVO.setTags(tagService.getTagsByUserId(user.getId()));
+
+        // 6. 粉丝数量
+        userProfileVO.setFollowersCount(userFollowService.lambdaQuery().eq(UserFollow::getFollowingId, id).count().intValue());
+
+        // 7. 关注数量
+        userProfileVO.setFollowingCount(userFollowService.lambdaQuery().eq(UserFollow::getFollowerId, id).count().intValue());
+
+        // 8. 当前用户是否已经关注该用户
+        userProfileVO.setIsFollowed(
+                userFollowService.lambdaQuery()
+                        .eq(UserFollow::getFollowerId, SaTokenUtil.getId())
+                        .eq(UserFollow::getFollowingId, id)
+                        .exists());
         return userProfileVO;
     }
 
@@ -190,6 +210,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new CommonException(UserErrorCode.USER_UPDATE_ERROR);
         }
         return this.getUserDetailById(SaTokenUtil.getId());
+    }
+
+    @Override
+    public Boolean followUser(Long followingId) {
+        // 1. 获取当前用户id
+        Long currentUserId = SaTokenUtil.getId();
+        // 2. 如果当前用户id和被关注用户id相同, 则不允许关注
+        assert currentUserId != null;
+        if (currentUserId.equals(followingId)) {
+            throw new CommonException(UserErrorCode.CANNOT_FOLLOW_SELF);
+        }
+        // 3. 执行关注操作
+        Boolean succeed = null;
+        try {
+            succeed = userFollowService.save(
+                    UserFollow.builder()
+                            .followerId(currentUserId)
+                            .followingId(followingId)
+                            .build()
+            );
+        } catch (DuplicateKeyException ex) {
+            throw new CommonException(UserErrorCode.ALREADY_FOLLOWED);
+        }
+
+        // 4. 推送关注通知
+        rocketMQTemplate.convertAndSend(RocketMqConstant.TOPIC_FOLLOW_MESSAGE, FollowEvent.builder().followerId(currentUserId).followingId(followingId).build());
+        return succeed;
+    }
+
+    @Override
+    public Boolean unFollowUser(Long followingId) {
+        // 1. 获取当前用户id
+        Long currentUserId = SaTokenUtil.getId();
+        // 2. 取消关注
+        return !userFollowService.lambdaUpdate()
+                .eq(UserFollow::getFollowerId, currentUserId)
+                .eq(UserFollow::getFollowingId, followingId)
+                .remove();
     }
 }
 

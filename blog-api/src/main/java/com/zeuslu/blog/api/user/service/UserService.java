@@ -9,6 +9,7 @@ import com.zeuslu.blog.api.user.domain.vo.LoginResponseVO;
 import com.zeuslu.blog.api.user.domain.vo.UserProfileVO;
 import com.zeuslu.blog.api.user.domain.vo.UserVO;
 import com.zeuslu.blog.api.user.domain.vo.UsernameCheckVO;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -38,4 +39,8 @@ public interface UserService extends IService<User> {
     List<UserVO> getBatchByIds(List<Long> authorIds);
 
     UserProfileVO updateUser(UpdateUserDTO updateUserDTO);
+
+    Boolean followUser(@NotNull Long followingId);
+
+    Boolean unFollowUser(@NotNull Long followingId);
 }

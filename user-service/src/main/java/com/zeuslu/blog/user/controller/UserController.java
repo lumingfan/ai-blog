@@ -10,6 +10,7 @@ import com.zeuslu.blog.api.user.domain.vo.UserProfileVO;
 import com.zeuslu.blog.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +41,17 @@ public class UserController {
             throw new CommonException(UserErrorCode.USER_UPDATE_PARAM_ERROR);
         }
         return Result.ok(userService.updateUser(updateUserDTO));
+    }
+
+    @PostMapping("/follow/{id}")
+    @Operation(summary = "关注用户")
+    public Result<Boolean> followUser(@PathVariable @NotNull Long id) {
+        return Result.ok(userService.followUser(id));
+    }
+
+    @DeleteMapping("follow/{id}")
+    @Operation(summary = "取消关注用户")
+    public Result<Boolean> unFollowUser(@PathVariable @NotNull Long id) {
+        return Result.ok(userService.unFollowUser(id));
     }
 }

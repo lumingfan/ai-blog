@@ -16,4 +16,6 @@ public interface NotificationService extends IService<Notification> {
     Boolean markAsRead(MarkNotificationReadDTO readDTO);
 
     void noticeLikeOnArticle(Long targetId, Long userId);
+
+    void noticeFollowing(Long followerId, Long followingId);
 }

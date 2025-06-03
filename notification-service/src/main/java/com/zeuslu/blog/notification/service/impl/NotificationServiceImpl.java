@@ -66,8 +66,9 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
 
     @Override
     public Boolean markAsRead(MarkNotificationReadDTO readDTO) {
+        // 如果没有提供ID，则不进行任何操作
         if (readDTO.getIds() == null || readDTO.getIds().isEmpty()) {
-            return false; // 如果没有提供ID，则不进行任何操作
+            return false;
         }
         return this.lambdaUpdate()
                 .eq(Notification::getUserId, SaTokenUtil.getId())
@@ -106,5 +107,31 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
                         .build()
         );
         // TODO: 增加websocket发送点赞通知
+    }
+
+    @Override
+    public void noticeFollowing(Long followerId, Long followingId) {
+        // 如果关注者和被关注者是同一个用户, 则不发送通知
+        if (followerId.equals(followingId)) {
+            return;
+        }
+
+        // 检查是否已经存在相同的通知(同一用户取消关注后再次关注时不重复发送通知)
+        if (this.lambdaQuery().eq(Notification::getUserId, followingId)
+                .eq(Notification::getSenderId, followerId)
+                .eq(Notification::getType, NotificationType.FOLLOW)
+                .exists()) {
+            return;
+        }
+
+        this.save(
+                Notification.builder()
+                        .content("用户 " + userService.getUserById(followerId).getUsername() + " 关注了你")
+                        .type(NotificationType.FOLLOW)
+                        .senderId(followerId)
+                        .userId(followingId)
+                        .build()
+        );
+
     }
 }

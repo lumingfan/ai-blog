@@ -13,6 +13,8 @@ public enum UserErrorCode implements IErrorCode {
     INTERNAL_SERVER_ERROR(50030, "服务繁忙, 请稍后重试"),
     USER_UPDATE_PARAM_ERROR(50031, "用户更新参数错误"),
     USER_UPDATE_ERROR(50032, "用户更新失败"),
+    CANNOT_FOLLOW_SELF(50033, "不能关注自己"),
+    ALREADY_FOLLOWED(50034, "已关注该用户"),
     ;
 
     private final int code;
