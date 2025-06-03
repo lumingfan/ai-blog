@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zeuslu.blog.api.article.domain.vo.ArticleDetailVO;
 import com.zeuslu.blog.api.article.service.ArticleService;
+import com.zeuslu.blog.api.comment.service.CommentService;
 import com.zeuslu.blog.api.notification.domain.dto.MarkNotificationReadDTO;
 import com.zeuslu.blog.api.notification.domain.dto.NotificationPageQuery;
 import com.zeuslu.blog.api.notification.domain.po.Notification;
@@ -15,6 +16,8 @@ import com.zeuslu.blog.api.user.domain.vo.UserVO;
 import com.zeuslu.blog.api.user.service.UserService;
 import com.zeuslu.blog.common.domain.PageResult;
 import com.zeuslu.blog.common.enums.NotificationType;
+import com.zeuslu.blog.common.event.CommentEvent;
+import com.zeuslu.blog.common.event.CommentReplyEvent;
 import com.zeuslu.blog.common.util.SaTokenUtil;
 import com.zeuslu.blog.notification.mapper.NotificationMapper;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
 public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Notification> implements NotificationService {
     private final UserService userService;
     private final ArticleService articleService;
+    private final CommentService commentService;
 
     @Override
     public PageResult<NotificationVO> getNotifications(NotificationPageQuery query) {
@@ -39,6 +43,7 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
                 .orderByDesc(Notification::getCreatedAt)
                 .page(query.toPage());
         //TODO: 优化为批量查询
+        //TODO: 增加评论通知跳转功能
         return PageResult.of(page, notification -> {
             NotificationVO notificationVO = BeanUtil.copyProperties(notification, NotificationVO.class);
             notificationVO.setSender(BeanUtil.copyProperties(userService.getUserById(notification.getSenderId()), UserVO.class));
@@ -133,5 +138,54 @@ public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Not
                         .build()
         );
 
+    }
+
+    @Override
+    public void noticeComment(CommentEvent message) {
+        Long targetId = message.getTargetId();
+
+        // 获取回复目标信息
+        // TODO: 后续增加其他类型的评论时需要根据message.getType()判断获取不同的目标信息
+        ArticleDetailVO articleById = articleService.getArticleById(targetId);
+        Long userId = articleById.getAuthor().getId();
+
+        // 自己回复自己的文章不进行通知
+        if (message.getCommenterId().equals(userId)) {
+            return;
+        }
+
+        this.save(
+                Notification.builder()
+                        .content("用户 " + userService.getUserById(message.getCommenterId()).getUsername() + " 在你的文章 \"" + articleById.getTitle() + "\" 下评论了: " + message.getContent())
+                        .type(NotificationType.COMMENT)
+                        .senderId(message.getCommenterId())
+                        .userId(userId)
+                        .targetId(targetId)
+                        .targetTitle(articleById.getTitle())
+                        .build()
+        );
+    }
+
+    @Override
+    public void noticeCommentReply(CommentReplyEvent message) {
+        // 自己回复自己的评论不进行通知
+        if (message.getCommenterId().equals(message.getAtUserId())) {
+            return;
+        }
+        Long userId = message.getAtUserId();
+        if (message.getAtUserId() == null) {
+            // 如果没有@用户，则从评论id中获取
+            userId = commentService.getById(message.getCommentId()).getUserId();
+        }
+
+        this.save(
+                Notification.builder()
+                        .content("用户 " + userService.getUserById(message.getCommenterId()).getUsername() + " 回复了你的评论: " + message.getContent())
+                        .type(NotificationType.COMMENT)
+                        .senderId(message.getCommenterId())
+                        .userId(userId)
+                        .targetId(message.getCommentId())
+                        .build()
+        );
     }
 }

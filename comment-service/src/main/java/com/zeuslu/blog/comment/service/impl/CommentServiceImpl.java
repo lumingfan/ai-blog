@@ -17,9 +17,13 @@ import com.zeuslu.blog.api.user.domain.vo.UserVO;
 import com.zeuslu.blog.api.user.service.UserService;
 import com.zeuslu.blog.comment.mapper.CommentMapper;
 import com.zeuslu.blog.comment.service.CommentReplyService;
+import com.zeuslu.blog.common.constant.RocketMqConstant;
 import com.zeuslu.blog.common.domain.PageResult;
+import com.zeuslu.blog.common.event.CommentEvent;
+import com.zeuslu.blog.common.event.CommentReplyEvent;
 import com.zeuslu.blog.common.util.SaTokenUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +41,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private final UserService userService;
     private final LikeService likeService;
     private final CommentReplyService commentReplyService;
+    private final RocketMQTemplate rocketMQTemplate;
 
     @Override
     public PageResult<CommentVO> getComments(CommentQueryParam param) {
@@ -97,6 +102,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // TODO: 异步编排优化
         CommentVO commentVO = BeanUtil.copyProperties(comment, CommentVO.class);
         commentVO.setUser(userService.getUserById(comment.getUserId()));
+        // 发送评论通知
+        rocketMQTemplate.convertAndSend(
+                RocketMqConstant.TOPIC_COMMENT_MESSAGE,
+                CommentEvent.builder()
+                        .targetId(comment.getSubjectId())
+                        .type(comment.getSubjectType())
+                        .commenterId(comment.getUserId())
+                        .content(comment.getContent())
+                        .build());
         return commentVO;
     }
 
@@ -113,6 +127,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (createCommentReplyDTO.getAtUserId() != null) {
             commentReplyVO.setAtUser(userService.getUserById(commentReply.getAtUserId()));
         }
+        // 发送评论回复通知
+        rocketMQTemplate.convertAndSend(
+                RocketMqConstant.TOPIC_COMMENT_REPLY_MESSAGE,
+                CommentReplyEvent.builder()
+                        .commentId(commentReply.getCommentId())
+                        .commenterId(commentReply.getUserId())
+                        .atUserId(commentReply.getAtUserId())
+                        .content(commentReply.getContent())
+                        .build()
+        );
         return commentReplyVO;
     }
 
