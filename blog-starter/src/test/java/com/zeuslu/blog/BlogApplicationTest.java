@@ -1,6 +1,6 @@
 package com.zeuslu.blog;
 
-import com.zeuslu.blog.tag.service.TagService;
+import com.zeuslu.blog.api.tag.service.TagService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
