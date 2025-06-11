@@ -1,11 +1,10 @@
-create table SPRING_AI_CHAT_MEMORY
-(
-    conversation_id varchar(36) not null,
-    content         text        not null,
-    type            varchar(10) not null,
-    timestamp       datetime    not null,
-    constraint spring_ai_chat_memory_chk_1
-        check (`type` in (_utf8mb4\'USER\',_utf8mb4\'ASSISTANT\',_utf8mb4\'SYSTEM\',_utf8mb4\'TOOL\'))
+CREATE TABLE IF NOT EXISTS SPRING_AI_CHAT_MEMORY (
+     `conversation_id` VARCHAR(36) NOT NULL,
+     `content` TEXT NOT NULL,
+     `type` ENUM('USER', 'ASSISTANT', 'SYSTEM', 'TOOL') NOT NULL,
+     `timestamp` TIMESTAMP NOT NULL,
+
+     INDEX `SPRING_AI_CHAT_MEMORY_CONVERSATION_ID_TIMESTAMP_IDX` (`conversation_id`, `timestamp`)
 );
 
 create index SPRING_AI_CHAT_MEMORY_CONVERSATION_ID_TIMESTAMP_IDX
