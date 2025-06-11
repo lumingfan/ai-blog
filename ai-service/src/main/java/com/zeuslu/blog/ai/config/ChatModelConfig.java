@@ -2,11 +2,13 @@ package com.zeuslu.blog.ai.config;
 
 import com.zeuslu.blog.ai.strategy.ChatModelStrategy;
 import com.zeuslu.blog.ai.strategy.impl.OllamaChatModelStrategy;
+import com.zeuslu.blog.ai.strategy.impl.OpenAiChatModelStrategy;
 import lombok.Data;
 import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
 import org.springframework.ai.model.ollama.autoconfigure.OllamaConnectionDetails;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.ollama.api.OllamaApi;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -36,10 +38,12 @@ public class ChatModelConfig {
     @Bean
     public List<ChatModelStrategy> chatModels(
             OllamaChatModel ollamaChatModel,
+            OpenAiChatModel openAiChatModel,
             JdbcChatMemoryRepository repository
     ) {
         List<ChatModelStrategy> chatModelStrategyList = new ArrayList<>();
         chatModelStrategyList.add(new OllamaChatModelStrategy(ollamaChatModel, repository, Integer.parseInt(maxMessages)));
+        chatModelStrategyList.add(new OpenAiChatModelStrategy(openAiChatModel, repository, Integer.parseInt(maxMessages)));
         return chatModelStrategyList;
     }
 

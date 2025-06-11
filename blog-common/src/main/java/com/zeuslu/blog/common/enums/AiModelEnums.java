@@ -11,6 +11,9 @@ import lombok.Getter;
 @Getter
 public enum AiModelEnums {
     OLLAMA("ollama"),
+    GPT_3_5_TURBO("gpt-3.5-turbo"),
+    GPT_4("gpt-4"),
+    GPT_4_32K("gpt-4-32k"),
     ;
 
     @JsonValue

@@ -1,6 +1,7 @@
 package com.zeuslu.blog.ai.factory;
 
 import com.zeuslu.blog.ai.strategy.ChatModelStrategy;
+import com.zeuslu.blog.common.enums.AiModelEnums;
 import com.zeuslu.blog.common.errorcode.AiErrorCode;
 import com.zeuslu.blog.common.exception.CommonException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatModelStrategyFactory {
     private final List<ChatModelStrategy> chatModelStrategyList;
-    private Map<String, ChatModelStrategy> modelMap;
+    private Map<AiModelEnums, ChatModelStrategy> modelMap;
 
     /**
      * 初始化模型map
@@ -26,8 +27,8 @@ public class ChatModelStrategyFactory {
     private void initModelMap() {
         modelMap = new HashMap<>();
         chatModelStrategyList.forEach(chatModelStrategy -> {
-            chatModelStrategy.getTypes().forEach(type -> {
-                modelMap.put(type, chatModelStrategy);
+            chatModelStrategy.getTypes().forEach(enumType -> {
+                modelMap.put(enumType, chatModelStrategy);
             });
         });
     }
@@ -35,10 +36,10 @@ public class ChatModelStrategyFactory {
     /**
      * 根据参数获取模型
      */
-    public ChatModelStrategy getStrategy(String key) {
+    public ChatModelStrategy getStrategy(AiModelEnums enumType) {
         // 懒加载
         initModelMap();
-        ChatModelStrategy strategy = modelMap.get(key);
+        ChatModelStrategy strategy = modelMap.get(enumType);
         if (strategy == null) {
             throw new CommonException(AiErrorCode.UNSUPPORTED_MODEL_TYPE);
         }

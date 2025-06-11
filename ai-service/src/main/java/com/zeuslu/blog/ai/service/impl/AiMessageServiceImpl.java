@@ -34,7 +34,7 @@ public class AiMessageServiceImpl implements AiMessageService {
     @Override
     public Flux<AiMessageVO> stream(AiMessageDTO aiMessageDTO) {
         Long userId = SaTokenUtil.getId();
-        Flux<String> stream = chatModelFactory.getStrategy(aiMessageDTO.getModel().getModel()).stream(aiMessageDTO);
+        Flux<String> stream = chatModelFactory.getStrategy(aiMessageDTO.getModel()).stream(aiMessageDTO);
         Long sessionId = updateSession(aiMessageDTO, userId);
         return stream.map(content -> {
             AiMessageVO message = new AiMessageVO();
@@ -49,7 +49,7 @@ public class AiMessageServiceImpl implements AiMessageService {
     @Override
     public String call(AiMessageDTO aiMessageDTO) {
         Long userId = SaTokenUtil.getId();
-        String call = chatModelFactory.getStrategy(aiMessageDTO.getModel().getModel()).call(aiMessageDTO);
+        String call = chatModelFactory.getStrategy(aiMessageDTO.getModel()).call(aiMessageDTO);
         updateSession(aiMessageDTO, userId);
         return call;
     }
